@@ -556,6 +556,25 @@ function initMainSlider() {
     });
 }
 
+// Функция для предзагрузки изображений
+function preloadProductImages() {
+    const productImages = utils.$$('.product-image img');
+    productImages.forEach(img => {
+        // Создаем копию изображения для предзагрузки
+        const preloadImg = new Image();
+        preloadImg.src = img.src;
+        
+        // Если есть hover-изображение, предзагружаем и его
+        if (img.classList.contains('main-image')) {
+            const hoverImg = img.closest('.product-image').querySelector('.hover-image');
+            if (hoverImg && hoverImg.src) {
+                const preloadHoverImg = new Image();
+                preloadHoverImg.src = hoverImg.src;
+            }
+        }
+    });
+}
+
 // Упрощенный слайдер товаров
 function initProductSlider() {
     const productsContainer = utils.$('.products-container');
@@ -601,6 +620,9 @@ function initProductSlider() {
     // Кнопки навигации
     prevBtn?.addEventListener('click', () => slide('prev'));
     nextBtn?.addEventListener('click', () => slide('next'));
+    
+    // Предзагрузка изображений для лучшей производительности
+    preloadProductImages();
     
     // Адаптация при изменении размера
     window.addEventListener('resize', utils.debounce(() => {
@@ -872,7 +894,7 @@ function initLanguageSelector() {
     });
 }
 
-// Упрощенное мобильное меню
+// Исправленное мобильное меню с правильной работой ссылок
 function initMobileMenu() {
     const mobileMenuBtn = utils.$('.mobile-menu-btn');
     const mobileMenu = utils.$('.mobile-menu');
@@ -901,29 +923,44 @@ function initMobileMenu() {
         document.body.style.overflow = '';
     });
 
-    // Обработка выпадающих меню
+    // ФИКС: Правильная обработка выпадающих меню с работающими ссылками
     document.querySelectorAll('.mobile-has-dropdown > a').forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const parent = this.parentNode;
-            
-            document.querySelectorAll('.mobile-has-dropdown.active').forEach(item => {
-                if (item !== parent) {
-                    item.classList.remove('active');
-                }
-            });
-            
-            parent.classList.toggle('active');
+            // Если у ссылки есть подменю - переключаем его, иначе разрешаем переход
+            if (this.nextElementSibling && this.nextElementSibling.classList.contains('mobile-dropdown-menu')) {
+                e.preventDefault();
+                const parent = this.parentNode;
+                
+                // Закрываем все другие выпадающие меню
+                document.querySelectorAll('.mobile-has-dropdown.active').forEach(item => {
+                    if (item !== parent) {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Переключаем текущее меню
+                parent.classList.toggle('active');
+            }
+            // Если подменю нет - разрешаем стандартное поведение (переход по ссылке)
         });
     });
 
-    // Для дочерних ссылок разрешаем переход
-    document.querySelectorAll('.mobile-dropdown-menu a').forEach(link => {
+    // ФИКС: Для всех ссылок в мобильном меню разрешаем переход и закрываем меню
+    document.querySelectorAll('.mobile-nav-links a, .mobile-dropdown-menu a').forEach(link => {
         link.addEventListener('click', function(e) {
-            if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
-                mobileMenu.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
+            // Если это не родительская ссылка с выпадающим меню
+            if (!this.parentNode.classList.contains('mobile-has-dropdown') || 
+                (this.nextElementSibling && !this.nextElementSibling.classList.contains('mobile-dropdown-menu'))) {
+                
+                // Закрываем мобильное меню после короткой задержки для плавности
+                setTimeout(() => {
+                    mobileMenu.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }, 300);
+                
+                // Разрешаем стандартное поведение - переход по ссылке
+                return true;
             }
         });
     });
@@ -1238,3 +1275,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     toggleScrollToTopButton();
 });
+
+
