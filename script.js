@@ -145,8 +145,7 @@ const appState = {
     currentSlide: 0,
     currentProductIndex: 0,
     currency: 'EUR',
-    language: 'en',
-    isScrolling: false
+    language: 'en'
 };
 
 // Утилиты
@@ -163,10 +162,6 @@ const utils = {
             timeout = setTimeout(later, wait);
             if (callNow) func(...args);
         };
-    },
-
-    isTouchDevice() {
-        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     },
 
     $(selector) {
@@ -559,39 +554,10 @@ function initMainSlider() {
             startSlideShow();
         });
     });
-
-    if (utils.isTouchDevice()) {
-        let startX = 0;
-        let isSwiping = false;
-        
-        slider.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            isSwiping = true;
-            clearInterval(slideInterval);
-        }, { passive: true });
-
-        slider.addEventListener('touchend', (e) => {
-            if (!isSwiping) return;
-            
-            const endX = e.changedTouches[0].clientX;
-            const diff = startX - endX;
-            
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    showSlide(appState.currentSlide + 1);
-                } else {
-                    showSlide(appState.currentSlide - 1);
-                }
-            }
-            
-            isSwiping = false;
-            startSlideShow();
-        }, { passive: true });
-    }
 }
 
-// ИСПРАВЛЕННЫЙ СЛАЙДЕР ТОВАРОВ
-function initImprovedProductSlider() {
+// Упрощенный слайдер товаров
+function initProductSlider() {
     const productsContainer = utils.$('.products-container');
     const prevBtn = utils.$('.prev-btn');
     const nextBtn = utils.$('.next-btn');
@@ -599,11 +565,6 @@ function initImprovedProductSlider() {
     if (!productsContainer) return;
     
     let currentIndex = 0;
-    let isDragging = false;
-    let startPos = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-    let animationID;
     
     function getVisibleProductsCount() {
         if (window.innerWidth < 480) return 1;
@@ -637,115 +598,9 @@ function initImprovedProductSlider() {
         updateSliderPosition();
     }
     
-    // Touch event handlers
-    function touchStart(index) {
-        return function(event) {
-            isDragging = true;
-            startPos = getPositionX(event);
-            animationID = requestAnimationFrame(animation);
-            productsContainer.style.cursor = 'grabbing';
-            productsContainer.style.transition = 'none';
-        }
-    }
-    
-    function touchEnd() {
-        if (!isDragging) return;
-        
-        isDragging = false;
-        cancelAnimationFrame(animationID);
-        
-        const movedBy = currentTranslate - prevTranslate;
-        const cardWidth = utils.$$('.product-card')[0]?.offsetWidth || 300;
-        
-        if (movedBy < -cardWidth * 0.2 && currentIndex < utils.$$('.product-card').length - getVisibleProductsCount()) {
-            currentIndex++;
-        } else if (movedBy > cardWidth * 0.2 && currentIndex > 0) {
-            currentIndex--;
-        }
-        
-        setPositionByIndex();
-    }
-    
-    function touchMove(event) {
-        if (isDragging) {
-            const currentPosition = getPositionX(event);
-            currentTranslate = prevTranslate + currentPosition - startPos;
-        }
-    }
-    
-    function getPositionX(event) {
-        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-    }
-    
-    function animation() {
-        setSliderPosition();
-        if (isDragging) requestAnimationFrame(animation);
-    }
-    
-    function setSliderPosition() {
-        productsContainer.style.transform = `translate3d(${currentTranslate}px, 0, 0)`;
-    }
-    
-    function setPositionByIndex() {
-        const productCards = utils.$$('.product-card');
-        if (productCards.length === 0) return;
-        
-        const cardWidth = productCards[0].offsetWidth + 30;
-        currentTranslate = currentIndex * -cardWidth;
-        prevTranslate = currentTranslate;
-        productsContainer.style.transition = 'transform 0.3s ease';
-        setSliderPosition();
-    }
-    
     // Кнопки навигации
     prevBtn?.addEventListener('click', () => slide('prev'));
     nextBtn?.addEventListener('click', () => slide('next'));
-    
-    // Touch events для мобильных
-    if (utils.isTouchDevice()) {
-        productsContainer.style.cursor = 'grab';
-        
-        const startDrag = (e) => {
-            isDragging = true;
-            startPos = getPositionX(e);
-            prevTranslate = currentTranslate;
-            productsContainer.style.transition = 'none';
-            requestAnimationFrame(animation);
-        };
-        
-        const drag = (e) => {
-            if (!isDragging) return;
-            const currentPosition = getPositionX(e);
-            currentTranslate = prevTranslate + currentPosition - startPos;
-        };
-        
-        const endDrag = () => {
-            if (!isDragging) return;
-            isDragging = false;
-            
-            const movedBy = currentTranslate - prevTranslate;
-            const threshold = 50;
-            
-            if (movedBy < -threshold) {
-                slide('next');
-            } else if (movedBy > threshold) {
-                slide('prev');
-            } else {
-                setPositionByIndex();
-            }
-        };
-        
-        // Touch events
-        productsContainer.addEventListener('touchstart', startDrag, { passive: true });
-        productsContainer.addEventListener('touchmove', drag, { passive: true });
-        productsContainer.addEventListener('touchend', endDrag, { passive: true });
-        
-        // Mouse events для десктопа
-        productsContainer.addEventListener('mousedown', startDrag);
-        productsContainer.addEventListener('mousemove', drag);
-        productsContainer.addEventListener('mouseup', endDrag);
-        productsContainer.addEventListener('mouseleave', endDrag);
-    }
     
     // Адаптация при изменении размера
     window.addEventListener('resize', utils.debounce(() => {
@@ -1017,7 +872,7 @@ function initLanguageSelector() {
     });
 }
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ МОБИЛЬНОГО МЕНЮ
+// Упрощенное мобильное меню
 function initMobileMenu() {
     const mobileMenuBtn = utils.$('.mobile-menu-btn');
     const mobileMenu = utils.$('.mobile-menu');
@@ -1046,36 +901,29 @@ function initMobileMenu() {
         document.body.style.overflow = '';
     });
 
-    // ФИКС: Правильная обработка выпадающих меню
+    // Обработка выпадающих меню
     document.querySelectorAll('.mobile-has-dropdown > a').forEach(link => {
         link.addEventListener('click', function(e) {
-            // Для родительских ссылок с выпадающим меню - переключаем меню
             e.preventDefault();
             const parent = this.parentNode;
             
-            // Закрываем все другие выпадающие меню
             document.querySelectorAll('.mobile-has-dropdown.active').forEach(item => {
                 if (item !== parent) {
                     item.classList.remove('active');
                 }
             });
             
-            // Переключаем текущее меню
             parent.classList.toggle('active');
         });
     });
 
-    // ФИКС: Для дочерних ссылок разрешаем переход и закрываем меню
+    // Для дочерних ссылок разрешаем переход
     document.querySelectorAll('.mobile-dropdown-menu a').forEach(link => {
         link.addEventListener('click', function(e) {
-            // Разрешаем переход по всем дочерним ссылкам
             if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
-                // Закрываем мобильное меню
                 mobileMenu.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.style.overflow = '';
-                // Разрешаем стандартное поведение - переход по ссылке
-                return true;
             }
         });
     });
@@ -1101,16 +949,6 @@ function initMobileMenu() {
         document.addEventListener('click', () => {
             mobileCurrencyDropdown.classList.remove('active');
         });
-    }
-
-    // Предотвращение скролла на iOS
-    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        mobileMenu.addEventListener('touchmove', function(e) {
-            if (e.target.classList.contains('mobile-nav-links') || 
-                e.target.closest('.mobile-nav-links')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
     }
 }
 
@@ -1259,72 +1097,6 @@ function initNewsletterAnimation() {
     checkScroll();
 }
 
-// Улучшенная обработка касаний для главного слайдера
-function initImprovedTouchHandling() {
-    const heroSlider = document.querySelector('.hero-slider');
-    if (!heroSlider) return;
-
-    let startY = 0;
-    let isVerticalSwipe = false;
-
-    heroSlider.addEventListener('touchstart', (e) => {
-        startY = e.touches[0].clientY;
-        isVerticalSwipe = false;
-    }, { passive: true });
-
-    heroSlider.addEventListener('touchmove', (e) => {
-        if (!isVerticalSwipe) {
-            const currentY = e.touches[0].clientY;
-            const diffY = Math.abs(currentY - startY);
-            
-            // Если вертикальное движение значительное, предотвращаем горизонтальную прокрутку
-            if (diffY > 10) {
-                isVerticalSwipe = true;
-            }
-        }
-    }, { passive: true });
-
-    heroSlider.addEventListener('touchend', () => {
-        isVerticalSwipe = false;
-    }, { passive: true });
-}
-
-// ФИКС ДЛЯ ЗУМА И СКАЧКОВ НА МОБИЛЬНЫХ
-function initMobileZoomFix() {
-    // Предотвращение масштабирования при двойном тапе
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function (event) {
-        const now = (new Date()).getTime();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, { passive: false });
-    
-    // Предотвращение масштабирования при скролле
-    document.addEventListener('touchmove', function (event) {
-        if (event.scale !== 1) {
-            event.preventDefault();
-        }
-    }, { passive: false });
-    
-    // Фикс для iOS
-    document.addEventListener('gesturestart', function (e) {
-        e.preventDefault();
-    });
-    
-    document.addEventListener('gesturechange', function (e) {
-        e.preventDefault();
-    });
-    
-    document.addEventListener('gestureend', function (e) {
-        e.preventDefault();
-    });
-    
-    // Предотвращение bounce-эффекта на iOS
-    document.body.addEventListener('touchstart', function() {}, { passive: true });
-}
-
 // Основная функция инициализации
 function init() {
     loadFromLocalStorage();
@@ -1336,7 +1108,7 @@ function init() {
     initSearch();
     initHeaderState();
     initMainSlider();
-    initImprovedProductSlider();
+    initProductSlider();
     initSliderChoice();
     initNewsletterAnimation();
     
@@ -1354,13 +1126,6 @@ function init() {
     });
 }
 
-// Обновление функции инициализации
-function initAll() {
-    init();
-    initImprovedTouchHandling();
-    initMobileZoomFix(); // Добавляем фикс для зума
-}
-
 // Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     const loadingOverlay = document.getElementById('loadingOverlay');
@@ -1375,21 +1140,15 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     setTimeout(hideLoadingScreen, 1100);
-    setTimeout(initAll, 1200);
+    setTimeout(init, 1200);
 });
 
 // Обработчик изменения размера окна
 window.addEventListener('resize', utils.debounce(() => {
-    // Переинициализация слайдера при изменении размера
-    if (typeof initImprovedProductSlider === 'function') {
-        initImprovedProductSlider();
+    if (typeof initProductSlider === 'function') {
+        initProductSlider();
     }
 }, 250));
-
-// Фикс для Safari на iOS
-if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-    document.addEventListener('touchstart', function() {}, { passive: true });
-}
 
 // Popup functionality
 document.addEventListener('DOMContentLoaded', function() {
