@@ -21,9 +21,9 @@
 }
 
 html {
-    -webkit-text-size-adjust: 100%;
+  /*   -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
+    text-size-adjust: 100%; */
     overflow-x: hidden;
 }
 
@@ -33,8 +33,8 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    touch-action: pan-y;
-    -webkit-overflow-scrolling: touch;
+   /*  touch-action: pan-y;
+    -webkit-overflow-scrolling: touch; */
 }
 
 a {
@@ -50,9 +50,9 @@ ul {
 
 /* Предотвращение масштабирования при свайпе */
 html, body {
-    touch-action: pan-y;
+  /*   touch-action: pan-y;
     -webkit-touch-callout: none;
-    -webkit-user-select: none;
+    -webkit-user-select: none; */
     user-select: none;
     overflow-x: hidden;
 }
@@ -2307,9 +2307,9 @@ mark {
 /* Исправления для мобильных устройств */
 @media (max-width: 768px) {
     html {
-        -webkit-text-size-adjust: 100%;
+    /*     -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
-        text-size-adjust: 100%;
+        text-size-adjust: 100%; */
         overflow-x: hidden;
     }
     
@@ -2411,8 +2411,8 @@ mark {
     }
     
     .product-image img {
-        width: 100%;
-        height: 100%;
+       /*  width: 100%;
+        height: 100%; */
         /* object-fit: cover; */
         display: block;
     }
@@ -2734,10 +2734,7 @@ mark {
 
 /* Улучшенный адаптивный слайдер товаров */
 @media (max-width: 1200px) {
-    .product-card {
-       /*  min-width: calc(33.333% - 20px); */
-       /*  width: 300px; */
-    }
+   
 }
 
 @media (max-width: 768px) {
@@ -2923,12 +2920,12 @@ mark {
 
 
 /* Фикс для изображений */
-img {
+/* img {
     max-width: 100%;
     height: auto;
     display: block;
 }
-
+ */
 /* Улучшенные стили для newsletter */
 .newsletter-form {
     max-width: 400px;

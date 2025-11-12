@@ -254,17 +254,44 @@ function addProductEventListeners() {
     });
 }
 
-// Инициализация страницы shop
-function initShopPage() {
+// ФИКС: Обработка кликов по категориям в фильтрах
+function initCategoryFilters() {
     if (!isShopPage()) return;
     
-    // Обработчики для фильтров категорий
+    // Обработчики для кнопок категорий (All, Tops, Bottoms, Accessories)
     document.querySelectorAll('.category-filter').forEach(btn => {
         btn.addEventListener('click', () => {
             const category = btn.dataset.category;
             handleCategorySelection(category);
         });
     });
+
+    // Обработчики для чекбоксов категорий в боковой панели
+    const categoryCheckboxes = document.querySelectorAll('#category input[type="checkbox"]');
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                // Снимаем все другие чекбоксы
+                categoryCheckboxes.forEach(cb => {
+                    if (cb !== e.target) cb.checked = false;
+                });
+                // Устанавливаем текущую категорию
+                currentCategory = e.target.value;
+            } else {
+                // Если сняли последний чекбокс - переключаем на "all"
+                currentCategory = 'all';
+            }
+            updateAndRender();
+        });
+    });
+}
+
+// Инициализация страницы shop
+function initShopPage() {
+    if (!isShopPage()) return;
+    
+    // Инициализация фильтров категорий
+    initCategoryFilters();
 
     // Обработчик для селекта сортировки
     const sortSelect = document.querySelector('.sort-select');
@@ -352,10 +379,10 @@ function initShopPage() {
         });
     }
 
-    // Update currentFilters when checkboxes change in sidebar
+    // Update currentFilters when checkboxes change in sidebar (кроме категорий)
     if (filterSidebar) {
         filterSidebar.addEventListener('change', (e) => {
-            if (e.target.type === 'checkbox') {
+            if (e.target.type === 'checkbox' && e.target.name !== 'category') {
                 const filterType = e.target.name;
                 const filterValue = e.target.value;
 
