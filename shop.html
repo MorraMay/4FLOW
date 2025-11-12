@@ -142,29 +142,109 @@
     </div>
     <div class="overlay"></div>
 
-    <!-- Product -->
-    <div class="product-card">
-        <div class="product-images">
-            <img id="front-image" src="./lots/01.jpg" alt="Front View" class="product-image">
-            <img id="back-image" src="./lots/02.jpg" alt="Back View" class="product-image">
-        </div>
-        <div class="product-details">
-            <h1 class="product-title">FORM BRA CROP</h1>
-            <p class="product-price">€2,676.00 UAH</p>
-            <p class="product-reviews">27 Reviews</p>
-            <a href="#" class="see-on-you">See it on you</a>
 
-            <div class="color-selector">
-                <h3>COLOUR: <span id="selected-color-name">FAWN</span></h3>
-                <div class="color-options">
-                    <div class="color-option black" data-color="black"></div>
-                    <div class="color-option white" data-color="white"></div>
+ <main class="collection-page">
+        <h1 class="collection-title">ESSENTIALS</h1>
+
+        <div class="controls-bar">
+            <div class="view-options">
+                <button id="grid-view" class="active"><i class="fas fa-th-large"></i></button>
+                <button id="list-view"><i class="fas fa-list"></i></button>
+            </div>
+            <div class="product-count">30 PRODUCTS</div>
+            <div class="sort-filter-options">
+                <div class="sort-by">
+                    <button id="sort-button">SORT BY <i class="fas fa-chevron-down"></i></button>
+                    <ul id="sort-dropdown" class="dropdown-content">
+                        <li data-sort="featured">Featured</li>
+                        <li data-sort="best-selling">Best selling</li>
+                        <li data-sort="alpha-asc">Alphabetically, A-Z</li>
+                        <li data-sort="alpha-desc">Alphabetically, Z-A</li>
+                        <li data-sort="price-low-high">Price, low to high</li>
+                        <li data-sort="price-high-low">Price, high to low</li>
+                        <li data-sort="date-old-new">Date, old to new</li>
+                        <li data-sort="date-new-old">Date, new to old</li>
+                    </ul>
+                </div>
+                <button id="filter-button">FILTER</button>
+            </div>
+        </div>
+
+        <div id="product-grid" class="product-grid">
+            <!-- Product cards will be injected here by JavaScript -->
+        </div>
+    </main>
+
+    <div id="filter-sidebar" class="filter-sidebar">
+        <div class="filter-header">
+            <h2>FILTERS</h2>
+            <button id="close-filter"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="filter-content">
+            <div class="filter-group">
+                <div class="filter-group-header" data-target="availability">AVAILABILITY <i class="fas fa-chevron-down"></i></div>
+                <div id="availability" class="filter-options">
+                    <label><input type="checkbox" name="availability" value="in-stock"> In stock</label>
+                    <label><input type="checkbox" name="availability" value="out-of-stock"> Out of stock</label>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div class="filter-group-header" data-target="size">SIZE <i class="fas fa-chevron-down"></i></div>
+                <div id="size" class="filter-options">
+                    <label><input type="checkbox" name="size" value="xs"> XS</label>
+                    <label><input type="checkbox" name="size" value="s"> S</label>
+                    <label><input type="checkbox" name="size" value="m"> M</label>
+                    <label><input type="checkbox" name="size" value="l"> L</label>
+                    <label><input type="checkbox" name="size" value="xl"> XL</label>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div class="filter-group-header" data-target="color">COLOR <i class="fas fa-chevron-down"></i></div>
+                <div id="color" class="filter-options color-options">
+                    <label><input type="checkbox" name="color" value="black" style="background-color: black;"></label>
+                    <label><input type="checkbox" name="color" value="white" style="background-color: white; border: 1px solid #ccc;"></label>
+                    <label><input type="checkbox" name="color" value="beige" style="background-color: #f5f5dc;"></label>
+                    <label><input type="checkbox" name="color" value="brown" style="background-color: #a52a2a;"></label>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div class="filter-group-header" data-target="category">CATEGORY <i class="fas fa-chevron-down"></i></div>
+                <div id="category" class="filter-options">
+                    <label><input type="checkbox" name="category" value="tops"> TOPS</label>
+                    <label><input type="checkbox" name="category" value="bottoms"> BOTTOMS</label>
+                    <label><input type="checkbox" name="category" value="accessories"> ACCESSORIES</label>
+                </div>
+            </div>
+        </div>
+        <div class="filter-footer">
+            <button class="view-results-button">VIEW RESULTS</button>
+        </div>
+    </div>
+
+
+    <!-- Product Modal -->
+    <div class="modal-product-card">
+        <div class="modal-product-images">
+            <img id="modal-front-image" src="./lots/01.jpg" alt="Front View" class="modal-product-image">
+            <img id="modal-back-image" src="./lots/02.jpg" alt="Back View" class="modal-product-image">
+        </div>
+        <div class="modal-product-details">
+            <h1 class="modal-product-title">FORM BRA CROP</h1>
+            <p class="modal-product-price">€2,676.00 UAH</p>
+            <p class="modal-product-reviews">27 Reviews</p>
+            <a href="#" class="modal-see-on-you">See it on you</a>
+
+            <div class="modal-color-selector">
+                <h3>COLOUR: <span id="modal-selected-color-name">FAWN</span></h3>
+                <div class="modal-color-options">
+                    <div class="modal-color-option modal-black" data-color="black"></div>
+                    <div class="modal-color-option modal-white" data-color="white"></div>
                 </div>
             </div>
 
-            <div class="size-selector">
-                <h3>SIZE: <span id="selected-size-name">XXS</span> <span>SIZE CHART</span></h3>
-                <select class="size-dropdown">
+            <div class="modal-size-selector">
+                <h3>SIZE: <span id="modal-selected-size-name">XXS</span> <span>SIZE CHART</span></h3>
+                <select class="modal-size-dropdown">
                     <option value="xxs">XXS</option>
                     <option value="xs">XS</option>
                     <option value="s">S</option>
@@ -173,8 +253,8 @@
                 </select>
             </div>
 
-            <p class="in-stock">In stock</p>
-            <button class="add-to-cart">Add to cart</button>
+            <p class="modal-in-stock">In stock</p>
+            <button class="modal-add-to-cart">Add to cart</button>
         </div>
     </div>
 
@@ -276,5 +356,6 @@
     <script src="./script.js">
         
     </script>
+    <script src="./shop.js"></script>
 </body>
 </html>

@@ -15,7 +15,16 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; /* Основной шрифт */
+    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -24,6 +33,8 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     scroll-behavior: smooth;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
 }
 
 a {
@@ -35,13 +46,7 @@ ul {
     list-style: none;
 }
 
-/* Исправления для багов */
 
-/* Фикс для переключателя валюты при скролле */
-
-{
-    color: var(--primary-color) ;
-}
 
 /* Улучшенная производительность анимаций */
 .hero-slider,
@@ -49,8 +54,11 @@ ul {
 .slide-content,
 .product-card,
 .product-image,
-.product-actions {
+.product-actions,
+.products-slider,
+.products-container {
     transform: translateZ(0);
+    will-change: transform;
     backface-visibility: hidden;
     perspective: 1000;
 }
@@ -164,7 +172,7 @@ ul {
 }
 
 .popup-submit-button {
-      background-color: #ee5180;
+    background-color: #ee5180;
     color: white;
     padding: 12px 25px;
     border: none;
@@ -176,22 +184,21 @@ ul {
 }
 
 .popup-submit-button:hover {
-background-color:  #ce1962;
+    background-color: #ce1962;
     transform: translateY(-1px);
 }
 
 .popup-no-thanks {
-color: #ee5180;
+    color: #ee5180;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
 .popup-no-thanks:hover {
-  color:  #ce1962;
+    color: #ce1962;
 }
 
-/* Стили для сообщения об успехе (после отправки email) */
 .popup-success-message {
     font-size: 24px;
     margin-bottom: 15px;
@@ -212,7 +219,7 @@ color: #ee5180;
 }
 
 .popup-continue-shopping {
-    color:  #ee5180;
+    color: #ee5180;
     text-decoration: none;
     font-size: 16px;
     margin-top: 10px;
@@ -220,11 +227,9 @@ color: #ee5180;
 }
 
 .popup-continue-shopping:hover {
-    color:  #ce1962;
+    color: #ce1962;
 }
 
-
-/* Стили для кнопки "Наверх" */
 .popup-scroll-to-top {
     position: fixed;
     bottom: 30px;
@@ -252,14 +257,13 @@ color: #ee5180;
     opacity: 1;
     visibility: visible;
     transform: scale(1);
-    animation: popup-pulse 2s infinite ease-in-out; 
+    animation: popup-pulse 2s infinite ease-in-out;
 }
-
 
 .popup-scroll-to-top:hover {
     background-image: linear-gradient(45deg, #ee5180, #f50565);
     transform: translateY(-5px) scale(1.05);
-    animation: none; 
+    animation: none;
 }
 
 @keyframes popup-arrow-bounce {
@@ -274,16 +278,14 @@ color: #ee5180;
 .popup-scroll-to-top span {
     display: block;
     font-size: 28px;
-    line-height: 1; 
+    line-height: 1;
     animation: popup-arrow-bounce 1.2s infinite ease-in-out;
 }
 
 .popup-scroll-to-top:hover span {
-    animation: none; 
-    transform: translateY(-3px); 
+    animation: none;
+    transform: translateY(-3px);
 }
-
-
 
 @keyframes popup-pulse {
     0% {
@@ -322,12 +324,11 @@ header.scrolled .logo,
 header:hover .logo {
     color: var(--primary-color);
 }
-header.scrolled .current-currency{
+
+header.scrolled .current-currency {
     color: #000;
 }
-.logo span{
-    
-}
+
 .header-top {
     display: flex;
     justify-content: space-between;
@@ -341,13 +342,13 @@ header.scrolled .current-currency{
     justify-content: flex-start;
 }
 
-.logo{
+.logo {
     flex: 1;
     display: flex;
     justify-content: center;
 }
 
-.header-icons{
+.header-icons {
     flex: 1;
     display: flex;
     justify-content: flex-end;
@@ -362,15 +363,15 @@ header.scrolled .current-currency{
 }
 
 .nav-links {
-    list-style: none; /* Убираем маркеры списка */
+    list-style: none;
     margin: 0;
     padding: 0;
-    display: flex; /* Чтобы ссылки были в ряд */
-    gap: 20px; /* Отступ между элементами меню */
+    display: flex;
+    gap: 20px;
 }
 
 .nav-links li {
-    position: relative; /* Важно для позиционирования выпадающего меню */
+    position: relative;
 }
 
 .nav-links a {
@@ -381,9 +382,9 @@ header.scrolled .current-currency{
     font-weight: 100;
     transition: var(--transition);
     color: var(--secondary-color);
-    text-decoration: none; 
-    padding: 10px 0; 
-    display: block; 
+    text-decoration: none;
+    padding: 10px 0;
+    display: block;
 }
 
 .nav-links a:hover {
@@ -405,7 +406,6 @@ header.scrolled .current-currency{
     width: 100%;
 }
 
-/* Стили для выпадающего меню */
 .dropdown-menu {
     list-style: none;
     margin: 0;
@@ -414,33 +414,30 @@ header.scrolled .current-currency{
     justify-content: center;
     gap: 40px;
     position: absolute;
-    top: 100%; 
+    top: 100%;
     left: 0;
-display: flex;
-    background-color: var(--secondary-color); 
+    display: flex;
+    background-color: var(--secondary-color);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    min-width: 100%; 
-    opacity: 0; 
-    visibility: hidden; 
-    transform: translateY(-10px); 
+    min-width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-    z-index: 1001; 
-    
+    z-index: 1001;
 }
 
 .dropdown-menu li a {
     color: var(--primary-color);
-     font-size: 13px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 100;
 }
 
 .dropdown-menu li a:hover {
-   
     color: var(--accent-color);
 }
-
 
 .has-dropdown:hover .dropdown-menu {
     opacity: 1;
@@ -462,16 +459,13 @@ display: flex;
     color: var(--secondary-color);
 }
 
-
 .wishlist-icon i {
-    color: #ffffff ; 
+    color: #ffffff;
 }
-
 
 header:hover .wishlist-icon i {
-    color: #ee5180;;
+    color: #ee5180;
 }
-
 
 header.scrolled .wishlist-icon i {
     color: #ee5180;
@@ -482,17 +476,15 @@ header.scrolled .wishlist-icon i {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     align-items: center;
-    width: 100%; 
+    width: 100%;
     gap: 35px;
 }
 
 .nav-links li {
-    position: static; 
-
+    position: static;
 }
-
 
 .header-icons i:hover {
     color: var(--accent-color);
@@ -517,13 +509,10 @@ header.scrolled .wishlist-icon i {
     position: relative;
 }
 
-/* Стили для выбора валюты */
 .currency-dropdown {
     position: relative;
     cursor: pointer;
     padding: 5px 10px;
-    
-    
 }
 
 .current-currency {
@@ -531,12 +520,13 @@ header.scrolled .wishlist-icon i {
     display: flex;
     align-items: center;
     gap: 5px;
-   color: white;
+    color: white;
 }
-header:hover .current-currency{
+
+header:hover .current-currency {
     color: #000 !important;
-    
 }
+
 .currency-dropdown:hover .currency-options {
     opacity: 1;
     visibility: visible;
@@ -573,23 +563,6 @@ header:hover .current-currency{
     border-bottom: none;
 }
 
-/* Адаптивность для выбора валюты */
-@media (max-width: 768px) {
-    .currency-dropdown {
-        padding: 8px 12px;
-    }
-    
-    .-currency {
-        font-size: 16px;
-    }
-    
-    .currency-options {
-        right: -10px;
-        min-width: 140px;
-    }
-}
-
-/* Стили для выбора языка в футере */
 .language-option {
     cursor: pointer;
     transition: color 0.3s ease;
@@ -604,12 +577,11 @@ header:hover .current-currency{
     color: #000;
 }
 
-/* Мобільне меню */
 .mobile-menu-btn {
     display: none;
     font-size: 24px;
     cursor: pointer;
-    color:#000;
+    color: #000;
     transition: var(--transition);
 }
 
@@ -624,6 +596,7 @@ header:hover .current-currency{
     transition: var(--transition);
     padding: 80px 30px 30px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .mobile-menu.active {
@@ -664,7 +637,6 @@ header:hover .current-currency{
     font-size: 16px;
 }
 
-/* Стили для мобильного меню */
 .mobile-nav-links ul {
     list-style: none;
     padding: 0;
@@ -682,7 +654,7 @@ header:hover .current-currency{
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-/* Стили для подсветки найденного текста в поиске */
+
 mark {
     background-color: #ffeb3b;
     color: #000;
@@ -700,9 +672,10 @@ mark {
     color: var(--gray);
     font-style: italic;
 }
+
 .mobile-dropdown-menu {
     display: none;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
     padding-left: 20px;
 }
 
@@ -767,7 +740,6 @@ mark {
     font-size: 16px;
 }
 
-/* Пошук */
 .search-overlay {
     position: fixed;
     top: 0;
@@ -845,13 +817,6 @@ mark {
     font-weight: bold;
 }
 
-.no-results {
-    text-align: center;
-    padding: 20px;
-    color: var(--gray);
-}
-
-/* Стили для уведомлений */
 .notification {
     position: fixed;
     top: 100px;
@@ -870,7 +835,6 @@ mark {
     transform: translateX(0);
 }
 
-/* Головний слайдер */
 .hero-slider {
     position: relative;
     height: 100vh;
@@ -893,7 +857,9 @@ mark {
     z-index: 0;
     pointer-events: none;
 }
-
+.slide-1{
+    background-position: 0% 0%;
+}
 .slide.active {
     opacity: 1;
     z-index: 2;
@@ -926,7 +892,7 @@ mark {
 }
 
 .slide-content h2 {
-    font-size: 40px;
+    font-size: 53px;
     margin-bottom: 25px;
     text-transform: uppercase;
     letter-spacing: -1px;
@@ -968,16 +934,16 @@ mark {
     border: 1px solid #ffffff;
 }
 
-.hero-slider-btn{
+.hero-slider-btn {
     padding: 15px 35px;
     background-color: transparent;
     border: 1px solid #ffffff;
-    transition: 0.6s ;
+    transition: 0.6s;
     position: relative;
 }
 
-.hero-slider-btn::after{
-    content:'';
+.hero-slider-btn::after {
+    content: '';
     position: absolute;
     width: 100%;
     right: 0;
@@ -988,12 +954,12 @@ mark {
     transition: 0.4s;
 }
 
-.hero-slider-btn:hover::after{
-   width: 0%;
-   left: 0;
+.hero-slider-btn:hover::after {
+    width: 0%;
+    left: 0;
 }
 
-.hero-slider-btn:hover{
+.hero-slider-btn:hover {
     color: #fff;
 }
 
@@ -1019,36 +985,6 @@ mark {
     background: rgba(0, 0, 0, 0.892);
 }
 
-/* Адаптивность для главного слайдера */
-@media (max-width: 768px) {
-    .hero-slider {
-        height: 60vh;
-        min-height: 400px;
-    }
-    
-    .slide {
-        background-size: cover;
-        background-position: center;
-    }
-    
-    .slide-content h2 {
-        font-size: 24px;
-        letter-spacing: 2px;
-    }
-    
-    .hero-slider-btn {
-        padding: 12px 25px;
-        font-size: 14px;
-    }
-    
-    .slider-dots {
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-}
-
-/* Секція нових надходжень*/
 .new-arrivals {
     margin: 50px 0;
     display: flex;
@@ -1061,26 +997,28 @@ mark {
     text-align: center;
     margin-bottom: 40px;
     font-size: 48px;
-  
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 400;
     padding: 0 20px;
-    
 }
 
 .products-slider {
     position: relative;
     overflow: hidden;
     margin: 0 60px;
-   
 }
 
 .products-container {
     display: flex;
-    transition: transform 0.5s ease;
+    transition: transform 0.3s ease;
     gap: 30px;
     padding: 10px 0;
+    cursor: grab;
+}
+
+.products-container:active {
+    cursor: grabbing;
 }
 
 .product-card {
@@ -1107,6 +1045,7 @@ mark {
     height: 100%;
     object-fit: cover;
     transition: var(--transition);
+    display: block;
 }
 
 .product-card:hover .product-image img.main-image {
@@ -1262,15 +1201,16 @@ mark {
     color: #000000;
 }
 
-/* Секція з трьох блоків */
 .section-3 {
     display: flex;
     align-items: center;
     width: 100%;
 }
-.section-3_block-title{
+
+.section-3_block-title {
     text-shadow: 0 1px 3px #00000068;
 }
+
 .section-3_block {
     width: 100%;
     height: 100vh;
@@ -1278,7 +1218,7 @@ mark {
     position: relative;
 }
 
-.section-3_block div{
+.section-3_block div {
     width: 200px;
     height: 200px;
     position: absolute;
@@ -1294,19 +1234,19 @@ mark {
     color: white;
 }
 
-.section-3-btn{
+.section-3-btn {
     padding: 15px 35px;
     background-color: transparent;
     border: 1px solid #ffffff;
-    transition: 0.4s ;
+    transition: 0.4s;
     position: relative;
     color: #000000;
     z-index: 1;
     cursor: pointer;
 }
 
-.section-3-btn::after{
-    content:'';
+.section-3-btn::after {
+    content: '';
     position: absolute;
     width: 100%;
     right: 0;
@@ -1317,47 +1257,15 @@ mark {
     transition: 0.6s;
 }
 
-.section-3-btn:hover::after{
-   width: 0%;
-   left: 0;
+.section-3-btn:hover::after {
+    width: 0%;
+    left: 0;
 }
 
-.section-3-btn:hover{
+.section-3-btn:hover {
     color: #ffffff;
 }
 
-/* Адаптивность для секции из трех блоков */
-@media (max-width: 768px) {
-    .section-3 {
-        flex-direction: column;
-    }
-    
-    .section-3_block {
-        height: 40vh;
-        min-height: 300px;
-        background-size: cover;
-        background-position: center;
-    }
-    
-    .section-3_block div {
-        right: 20px;
-        width: 150px;
-        height: 150px;
-        padding-bottom: 20px;
-        gap: 10px;
-    }
-    
-    .section-3_block-title {
-        font-size: 18px;
-    }
-    
-    .section-3-btn {
-        padding: 10px 20px;
-        font-size: 14px;
-    }
-}
-
-/* Slider choice */
 .slider-container1 {
     display: flex;
     align-items: center;
@@ -1369,29 +1277,28 @@ mark {
 }
 
 .slider-container1-block {
-
     margin: 0 auto;
     text-align: center;
     margin-top: 80px;
 }
-.slider-container1-block_title-mini{
-        text-align: center;
-  
+
+.slider-container1-block_title-mini {
+    text-align: center;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 0px;
     font-weight: 400;
-   
 }
-.slider-container1-block_title{
+
+.slider-container1-block_title {
     text-align: center;
-  width: 100%;
+    width: 100%;
     font-size: 38px;
     text-transform: uppercase;
     letter-spacing: 0px;
-   
     font-weight: 400;
 }
+
 .slider-wrapper1 {
     display: flex;
     justify-content: space-between;
@@ -1422,6 +1329,7 @@ mark {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .hotspot1 {
@@ -1437,14 +1345,14 @@ mark {
     align-items: center;
     transition: 0.4s ease;
     opacity: 0.8;
-    animation: hot1  linear 1s infinite alternate-reverse;
+    animation: hot1 linear 1s infinite alternate-reverse;
 }
 
-@keyframes hot1{
-    0%{
+@keyframes hot1 {
+    0% {
         transform: scale(1);
     }
-    100%{
+    100% {
         transform: scale(1.3);
     }
 }
@@ -1461,7 +1369,7 @@ mark {
 .hotspot1:hover {
     transform: scale(1.2);
     opacity: 1;
-    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .product-info-area1 {
@@ -1469,7 +1377,7 @@ mark {
     padding: 30px;
     background-color: #fff;
     border: 1px solid #eee;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -1482,6 +1390,7 @@ mark {
     height: 400px;
     object-fit: cover;
     margin-bottom: 20px;
+    display: block;
 }
 
 .product-name1 {
@@ -1510,19 +1419,18 @@ mark {
     text-align: center;
 }
 
-.view-product-btn1{
+.view-product-btn1 {
     padding: 15px 35px;
     background-color: transparent;
-    
-    transition: 0.4s ;
+    transition: 0.4s;
     position: relative;
-    color: #fff; 
+    color: #fff;
     cursor: pointer;
     z-index: 1;
 }
 
-.view-product-btn1::after{
-    content:'';
+.view-product-btn1::after {
+    content: '';
     position: absolute;
     width: 100%;
     right: 0;
@@ -1533,12 +1441,12 @@ mark {
     transition: 0.6s;
 }
 
-.view-product-btn1:hover::after{
-   width: 0%;
-   left: 0;
+.view-product-btn1:hover::after {
+    width: 0%;
+    left: 0;
 }
 
-.view-product-btn1:hover{
+.view-product-btn1:hover {
     color: #000000;
 }
 
@@ -1564,7 +1472,6 @@ mark {
     transform: scale(1.2);
 }
 
-/* elusive */
 .elusive {
     height: 100vh;
     text-align: center;
@@ -1579,23 +1486,6 @@ mark {
     background-position: 0% 20%;
 }
 
-/* Адаптивность для elusive секции */
-@media (max-width: 768px) {
-    .elusive {
-        height: 60vh;
-        min-height: 400px;
-        background-size: cover;
-        background-position: center;
-        background-attachment: scroll;
-    }
-    
-    .elusive-btn {
-        padding: 12px 25px;
-        font-size: 14px;
-    }
-}
-
-/* Корзина */
 .cart-sidebar {
     position: fixed;
     top: 0;
@@ -1712,7 +1602,6 @@ mark {
     color: var(--gray);
 }
 
-/* Сайдбар вибраного */
 .wishlist-sidebar {
     position: fixed;
     top: 0;
@@ -1821,8 +1710,6 @@ mark {
     visibility: visible;
 }
 
-
-/* Newsletter */
 .newsletter {
     height: 100vh;
     text-align: center;
@@ -1831,13 +1718,12 @@ mark {
     justify-content: center;
     flex-direction: column;
     gap: 20px;
-    color: #000; /* Изменено на черный */
-    background-color: #fff; /* Белый фон */
+    color: #000;
+    background-color: #fff;
     position: relative;
     overflow: hidden;
 }
 
-/* Вертикальные линии */
 .newsletter-lines {
     position: absolute;
     top: 0;
@@ -1851,11 +1737,10 @@ mark {
     position: absolute;
     width: 1px;
     height: 150%;
-    background: rgba(0, 0, 0, 0.2); /* Темные линии */
+    background: rgba(0, 0, 0, 0.2);
     transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Линии слева */
 .newsletter-line.left-1 {
     left: 15%;
     transform: translateY(-100%);
@@ -1871,7 +1756,6 @@ mark {
     transform: translateY(-80%);
 }
 
-/* Линии справа */
 .newsletter-line.right-1 {
     right: 15%;
     transform: translateY(100%);
@@ -1887,7 +1771,6 @@ mark {
     transform: translateY(80%);
 }
 
-/* Анимация линий при скролле */
 .newsletter.animate .newsletter-line.left-1 {
     transform: translateY(50%);
 }
@@ -1912,7 +1795,6 @@ mark {
     transform: translateY(-70%);
 }
 
-/* Анимация фона для всего блока */
 .newsletter::before {
     content: '';
     position: absolute;
@@ -1920,7 +1802,7 @@ mark {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent); /* Темный градиент */
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.03), transparent);
     transition: left 1.5s ease;
     z-index: 1;
 }
@@ -1936,7 +1818,6 @@ mark {
     z-index: 2;
 }
 
-/* Анимация для мини-заголовка */
 .newsletter-title-mini {
     font-size: 16px;
     text-transform: uppercase;
@@ -1946,7 +1827,7 @@ mark {
     transform: translateY(30px) rotate(-5deg);
     transition: all 0.8s ease;
     display: inline-block;
-    color: rgba(0,0,0,0.7); /* Темный цвет */
+    color: rgba(0, 0, 0, 0.7);
 }
 
 .newsletter.animate .newsletter-title-mini {
@@ -1954,7 +1835,6 @@ mark {
     transform: translateY(0) rotate(0deg);
 }
 
-/* Анимация для основного заголовка */
 .newsletter-title {
     font-size: 48px;
     text-transform: uppercase;
@@ -1964,7 +1844,7 @@ mark {
     opacity: 0;
     transform: scale(0.8) translateY(50px);
     transition: all 1s ease 0.3s;
-    color: #000; /* Черный цвет */
+    color: #000;
 }
 
 .newsletter.animate .newsletter-title {
@@ -1972,7 +1852,6 @@ mark {
     transform: scale(1) translateY(0);
 }
 
-/* Эффект подчеркивания */
 .newsletter-title::after {
     content: '';
     position: absolute;
@@ -1980,7 +1859,7 @@ mark {
     left: 50%;
     width: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #000, transparent); /* Черный градиент */
+    background: linear-gradient(90deg, transparent, #000, transparent);
     transform: translateX(-50%);
     transition: width 1.2s ease 0.8s;
 }
@@ -1989,7 +1868,6 @@ mark {
     width: 200px;
 }
 
-/* Анимация для текста подписки */
 .newsletter-subscribe {
     max-width: 600px;
     margin: 0 auto 30px;
@@ -1997,7 +1875,7 @@ mark {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease 0.6s;
-    color: rgba(0,0,0,0.8); /* Темный цвет */
+    color: rgba(0, 0, 0, 0.8);
     z-index: 2;
     position: relative;
 }
@@ -2008,16 +1886,15 @@ mark {
 }
 
 .newsletter-btn {
-    color: #000; /* Черный цвет */
+    color: #000;
     text-decoration: underline;
     transition: color 0.3s ease;
 }
 
 .newsletter-btn:hover {
-    color: rgba(0,0,0,0.6);
+    color: rgba(0, 0, 0, 0.6);
 }
 
-/* Анимация для формы */
 .newsletter-form {
     width: 400px;
     display: flex;
@@ -2039,18 +1916,18 @@ mark {
     flex: 1;
     padding: 12px;
     background-color: transparent;
-    border: 1px solid rgba(0,0,0,0.3); /* Темная граница */
-    color: #000; /* Черный текст */
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    color: #000;
     width: 60%;
     transition: all 0.3s ease;
 }
 
 .newsletter-form input::placeholder {
-    color: rgba(0,0,0,0.5); /* Темный placeholder */
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .newsletter-form input:focus {
-    border: 1px solid #000; /* Черная граница при фокусе */
+    border: 1px solid #000;
     border-radius: 0;
     transform: scale(1.02);
 }
@@ -2059,10 +1936,10 @@ mark {
     width: 40%;
     padding: 15px 35px;
     background-color: transparent;
-    border: 1px solid #000; /* Черная граница */
+    border: 1px solid #000;
     transition: 0.4s;
     position: relative;
-    color: #fff; /* Белый текст */
+    color: #fff;
     z-index: 1;
     cursor: pointer;
     font-weight: 600;
@@ -2077,7 +1954,7 @@ mark {
     right: 0;
     z-index: -1;
     top: 0;
-    background-color: #000; /* Черный фон */
+    background-color: #000;
     height: 100%;
     transition: 0.6s;
 }
@@ -2088,10 +1965,9 @@ mark {
 }
 
 .newsletter-form button:hover {
-    color: #000; /* Черный текст при hover */
+    color: #000;
 }
 
-/* Парящие частицы на фоне */
 .newsletter::after {
     content: '';
     position: absolute;
@@ -2100,12 +1976,12 @@ mark {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 30%, rgba(0,0,0,0.05) 2px, transparent 0),
-        radial-gradient(circle at 80% 70%, rgba(0,0,0,0.05) 2px, transparent 0),
-        radial-gradient(circle at 40% 80%, rgba(0,0,0,0.05) 2px, transparent 0),
-        radial-gradient(circle at 60% 20%, rgba(0,0,0,0.05) 2px, transparent 0),
-        radial-gradient(circle at 10% 50%, rgba(0,0,0,0.03) 1px, transparent 0),
-        radial-gradient(circle at 90% 40%, rgba(0,0,0,0.03) 1px, transparent 0);
+        radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.05) 2px, transparent 0),
+        radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.05) 2px, transparent 0),
+        radial-gradient(circle at 40% 80%, rgba(0, 0, 0, 0.05) 2px, transparent 0),
+        radial-gradient(circle at 60% 20%, rgba(0, 0, 0, 0.05) 2px, transparent 0),
+        radial-gradient(circle at 10% 50%, rgba(0, 0, 0, 0.03) 1px, transparent 0),
+        radial-gradient(circle at 90% 40%, rgba(0, 0, 0, 0.03) 1px, transparent 0);
     background-size: 100% 100%;
     opacity: 0;
     animation: floatParticles 6s ease-in-out infinite;
@@ -2132,104 +2008,6 @@ mark {
     }
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-    .newsletter {
-        padding: 0 20px;
-        height: auto;
-        min-height: 100vh;
-    }
-    
-    .newsletter-title {
-        font-size: 36px;
-        letter-spacing: 5px;
-    }
-    
-    .newsletter-title-mini {
-        font-size: 14px;
-        letter-spacing: 2px;
-    }
-    
-    .newsletter-form {
-        width: 100%;
-        max-width: 400px;
-        flex-direction: column;
-    }
-    
-    .newsletter-form input,
-    .newsletter-form button {
-        width: 100%;
-    }
-    
-    .newsletter.animate .newsletter-title::after {
-        width: 150px;
-    }
-    
-    .newsletter-subscribe {
-        padding: 0 20px;
-    }
-    
-    /* Адаптация линий для мобильных */
-    .newsletter-line.left-1 {
-        left: 10%;
-    }
-    
-    .newsletter-line.left-2 {
-        left: 20%;
-    }
-    
-    .newsletter-line.left-3 {
-        left: 30%;
-    }
-    
-    .newsletter-line.right-1 {
-        right: 10%;
-    }
-    
-    .newsletter-line.right-2 {
-        right: 20%;
-    }
-    
-    .newsletter-line.right-3 {
-        right: 30%;
-    }
-}
-
-@media (max-width: 480px) {
-    .newsletter {
-        padding: 0 15px;
-    }
-    
-    .newsletter-title {
-        font-size: 28px;
-        letter-spacing: 3px;
-    }
-    
-    .newsletter-title-mini {
-        font-size: 12px;
-        letter-spacing: 1px;
-    }
-    
-    .newsletter.animate .newsletter-title::after {
-        width: 120px;
-    }
-    
-    .newsletter-subscribe {
-        font-size: 14px;
-        padding: 0 10px;
-    }
-    
-    .newsletter-form button {
-        padding: 12px 25px;
-    }
-    
-    /* Скрываем линии на очень маленьких экранах */
-    .newsletter-line {
-        display: none;
-    }
-}
-
-/* Футер */
 .footer {
     background-color: #f5f5f5;
     padding: 35px 20px;
@@ -2476,8 +2254,21 @@ mark {
     }
 }
 
-/* Оптимизация для телефонов */
+/* Исправления для мобильных устройств */
 @media (max-width: 768px) {
+    html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        overflow-x: hidden;
+    }
+    
+    body {
+        overflow-x: hidden;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
+    }
+    
     header {
         background-color: var(--secondary-color);
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -2510,13 +2301,17 @@ mark {
     .header-top {
         justify-content: center;
     }
-    .logo{
+    
+    .logo {
         font-size: 25px;
     }
+    
     .hero-slider {
         height: 60vh;
     }
-
+.slide-1{
+    background-position:center;
+}
     .slide-content {
         margin-left: 5%;
         padding: 20px;
@@ -2532,12 +2327,41 @@ mark {
         font-size: 14px;
     }
 
+    /* Фикс для второго слайдера товаров */
     .products-slider {
-        margin: 0 20px;
+        margin: 0 10px;
     }
-
+    
+    .products-container {
+        display: flex;
+        transition: transform 0.3s ease;
+        padding: 10px 5px;
+        gap: 15px;
+    }
+    
     .product-card {
-        min-width: calc(50% - 15px);
+        min-width: calc(100% - 20px) !important;
+        flex-shrink: 0;
+        margin: 0 10px;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+    
+    .product-image {
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .product-card {
+        min-width: calc(100% - 20px);
     }
 
     .product-image {
@@ -2584,8 +2408,8 @@ mark {
         max-width: 300px;
     }
 
-    .nav-arrow1 {
-        display: none;
+    .slider-nav {
+        display: none !important;
     }
 
     .newsletter-form {
@@ -2653,23 +2477,68 @@ mark {
         width: 150px;
         height: 150px;
     }
-     .section-3-btn {
+    
+    .section-3-btn {
         padding: 10px 15px;
         font-size: 19px;
+    }
+    
+    /* Фикс для изображений в слайдере выбора */
+    .slider-container1 {
+        overflow: hidden;
+        margin: 20px auto;
+    }
+    
+    .slide1 {
+        flex-direction: column;
+        padding: 0 10px;
+    }
+    
+    .image-area1 {
+        width: 100%;
+        max-width: 300px;
+        height: 300px;
+    }
+    
+    .image-area1 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .product-info-area1 {
+        width: 100%;
+        max-width: 300px;
+        padding: 20px;
+    }
+    
+    /* Улучшение производительности */
+    .hero-slider,
+    .slide,
+    .products-slider,
+    .product-card {
+        transform: translateZ(0);
+        will-change: transform;
+        backface-visibility: hidden;
+        perspective: 1000;
+    }
+    
+    /* Фикс для скролла */
+    .mobile-menu {
+        -webkit-overflow-scrolling: touch;
     }
 }
 
 @media (max-width: 576px) {
-
     .product-name1 {
-    font-size: 1.1em;
-    font-weight: 600;
-    margin-bottom: 5px;
-    height: 50px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 5px;
+        height: 50px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
     .hero-slider {
         height: 100vh;
@@ -2717,7 +2586,6 @@ mark {
     }
 }
 
-/* Дополнительные улучшения для телефонов */
 @media (max-width: 480px) {
     .slide-content h2 {
         font-size: 18px;
@@ -2747,9 +2615,20 @@ mark {
     .footer-section {
         max-width: 280px;
     }
+    
+    .product-image {
+        height: 250px;
+    }
+    
+    .image-area1 {
+        height: 250px;
+    }
+    
+    .product-info-area1 .product-info-image1 {
+        height: 300px;
+    }
 }
 
-/* Улучшения для очень маленьких экранов */
 @media (max-width: 360px) {
     .header-top {
         padding: 10px 0;
@@ -2775,256 +2654,23 @@ mark {
         padding: 5px;
     }
 }
-/* АДАПТАЦИЯ СЛАЙДЕРА ТОВАРОВ ДЛЯ ТЕЛЕФОНОВ И ПЛАНШЕТОВ */
 
-/* Планшеты (1024px и меньше) */
-@media (max-width: 1024px) {
-    .products-slider {
-        width: 100%;
-        margin: 0 40px;
-    }
-    
-    .product-card {
-        min-width: calc(33.333% - 20px);
-    }
-    
-    .product-image {
-        height: 350px;
-    }
-    
-    .slider-nav-btn {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .product-info {
-        padding: 15px;
-    }
+/* Предотвращение масштабирования при двойном тапе */
+* {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
 }
 
-/* Планшеты (768px и меньше) */
-@media (max-width: 768px) {
-    .new-arrivals {
-        margin: 30px 0;
-        
-    }
-    
-    .section-title {
-        font-size: 24px;
-        margin-bottom: 30px;
-        letter-spacing: 1px;
-    }
-    
-    .products-slider {
-        margin: 0 30px;
-    }
-    
-    .product-card {
-        min-width: calc(50% - 15px);
-    }
-    
-    .products-container {
-        gap: 20px;
-    }
-    
-    .product-image {
-        height: 300px;
-    }
-    
-    .product-info {
-        padding: 12px;
-    }
-    
-    .product-title {
-        font-size: 14px;
-        letter-spacing: 0.5px;
-    }
-    
-    .product-price {
-        font-size: 16px;
-    }
-    
-    .slider-nav {
-        top: 40%;
-        left: 10px;
-        right: 10px;
-    }
-    
-    .slider-nav-btn {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .action-btn {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .sale-badge {
-        font-size: 10px;
-        padding: 4px 8px;
-    }
-    
-    .new-arrivals-btn {
-        padding: 12px 25px;
-        font-size: 14px;
-        margin-top: 20px;
-    }
+/* Фикс для плавного скролла на iOS */
+.scroll-container {
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Телефоны (576px и меньше) */
-@media (max-width: 576px) {
-    .products-slider {
-        margin: 0 20px;
-    }
-    
-    .product-card {
-        min-width: calc(50% - 10px);
-    }
-    
-    .products-container {
-        gap: 15px;
-    }
-    
-    .product-image {
-        height: 250px;
-    }
-    
-    .product-info {
-        padding: 10px;
-    }
-    
-    .product-title {
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-    
-  /*   .slider-nav {
-         display: none;  Скрываем стрелки на маленьких экранах 
-    } */
-}
-
-/* Маленькие телефоны (480px и меньше) */
-@media (max-width: 480px) {
-    .new-arrivals {
-        margin: 20px 0;
-    }
-    
-    .section-title {
-        font-size: 20px;
-        margin-bottom: 20px;
-        padding: 0 15px;
-    }
-    
-    .products-slider {
-        margin: 0 15px;
-    }
-    
-    .product-card {
-        min-width: 100%; /* Одна карточка на весь экран */
-    }
-    
-    .products-container {
-        gap: 10px;
-    }
-    
-    .product-image {
-        height: 280px;
-    }
-    
-    .product-actions {
-        top: 10px;
-        right: 10px;
-        gap: 8px;
-    }
-    
-    .action-btn {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .product-info {
-        padding: 8px;
-    }
-    
-    .product-title {
-        font-size: 12px;
-        letter-spacing: 0.3px;
-    }
-    
-    .product-price {
-        font-size: 14px;
-    }
-    
-    .sale-badge {
-        top: 10px;
-        left: 10px;
-        font-size: 9px;
-        padding: 3px 6px;
-    }
-    
-    .new-arrivals-btn {
-        padding: 10px 20px;
-        font-size: 13px;
-    }
-}
-
-/* Очень маленькие телефоны (360px и меньше) */
-@media (max-width: 360px) {
-    .products-slider {
-        margin: 0 10px;
-    }
-    
-    .product-image {
-        height: 220px;
-    }
-    
-    .product-info {
-        padding: 6px;
-    }
-}
-
-/* Горизонтальная ориентация на телефонах */
-@media (max-width: 768px) and (orientation: landscape) {
-    .product-image {
-        height: 200px;
-    }
-    
-    .products-container {
-        gap: 10px;
-    }
-    
-    .product-info {
-        padding: 8px;
-    }
-}
-
-
-@media (max-width: 768px) {
-    .product-card {
-        padding: 5px;
-    }
-    
-    .action-btn {
-        min-width: 35px;
-        min-height: 35px;
-    }
-    
-
-    .product-card:active {
-        transform: scale(0.98);
-    }
-    
-    .slider-nav-btn:active {
-        transform: scale(0.9);
-    }
-}
-
-
-@media (max-width: 768px) {
-    .new-arrivals,
-    .product-card,
-    .slide-content {
-        transition: none !important;
-    }
+/* Улучшение производительности анимаций */
+.product-card,
+.slide,
+.hero-slider-btn,
+.slider-nav-btn {
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
