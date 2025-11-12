@@ -590,6 +590,7 @@ function initMainSlider() {
     }
 }
 
+// ИСПРАВЛЕННЫЙ СЛАЙДЕР ТОВАРОВ
 function initImprovedProductSlider() {
     const productsContainer = utils.$('.products-container');
     const prevBtn = utils.$('.prev-btn');
@@ -598,6 +599,11 @@ function initImprovedProductSlider() {
     if (!productsContainer) return;
     
     let currentIndex = 0;
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID;
     
     function getVisibleProductsCount() {
         if (window.innerWidth < 480) return 1;
@@ -611,7 +617,7 @@ function initImprovedProductSlider() {
         if (productCards.length === 0) return;
         
         const cardWidth = productCards[0].offsetWidth + 30;
-        const maxIndex = productCards.length - getVisibleProductsCount();
+        const maxIndex = Math.max(0, productCards.length - getVisibleProductsCount());
         
         currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
         
@@ -620,7 +626,7 @@ function initImprovedProductSlider() {
     
     function slide(direction) {
         const productCards = utils.$$('.product-card');
-        const maxIndex = productCards.length - getVisibleProductsCount();
+        const maxIndex = Math.max(0, productCards.length - getVisibleProductsCount());
         
         if (direction === 'next' && currentIndex < maxIndex) {
             currentIndex++;
@@ -631,54 +637,117 @@ function initImprovedProductSlider() {
         updateSliderPosition();
     }
     
-    // Обработчики для кнопок
+    // Touch event handlers
+    function touchStart(index) {
+        return function(event) {
+            isDragging = true;
+            startPos = getPositionX(event);
+            animationID = requestAnimationFrame(animation);
+            productsContainer.style.cursor = 'grabbing';
+            productsContainer.style.transition = 'none';
+        }
+    }
+    
+    function touchEnd() {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        const movedBy = currentTranslate - prevTranslate;
+        const cardWidth = utils.$$('.product-card')[0]?.offsetWidth || 300;
+        
+        if (movedBy < -cardWidth * 0.2 && currentIndex < utils.$$('.product-card').length - getVisibleProductsCount()) {
+            currentIndex++;
+        } else if (movedBy > cardWidth * 0.2 && currentIndex > 0) {
+            currentIndex--;
+        }
+        
+        setPositionByIndex();
+    }
+    
+    function touchMove(event) {
+        if (isDragging) {
+            const currentPosition = getPositionX(event);
+            currentTranslate = prevTranslate + currentPosition - startPos;
+        }
+    }
+    
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+    
+    function animation() {
+        setSliderPosition();
+        if (isDragging) requestAnimationFrame(animation);
+    }
+    
+    function setSliderPosition() {
+        productsContainer.style.transform = `translate3d(${currentTranslate}px, 0, 0)`;
+    }
+    
+    function setPositionByIndex() {
+        const productCards = utils.$$('.product-card');
+        if (productCards.length === 0) return;
+        
+        const cardWidth = productCards[0].offsetWidth + 30;
+        currentTranslate = currentIndex * -cardWidth;
+        prevTranslate = currentTranslate;
+        productsContainer.style.transition = 'transform 0.3s ease';
+        setSliderPosition();
+    }
+    
+    // Кнопки навигации
     prevBtn?.addEventListener('click', () => slide('prev'));
     nextBtn?.addEventListener('click', () => slide('next'));
     
-    // Обработчики для свайпа на мобильных
+    // Touch events для мобильных
     if (utils.isTouchDevice()) {
-        let startX = 0;
-        let currentX = 0;
-        let isSwiping = false;
+        productsContainer.style.cursor = 'grab';
         
-        productsContainer.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            isSwiping = true;
+        const startDrag = (e) => {
+            isDragging = true;
+            startPos = getPositionX(e);
+            prevTranslate = currentTranslate;
             productsContainer.style.transition = 'none';
-        }, { passive: true });
+            requestAnimationFrame(animation);
+        };
         
-        productsContainer.addEventListener('touchmove', (e) => {
-            if (!isSwiping) return;
-            currentX = e.touches[0].clientX;
-            const diff = startX - currentX;
-            
-            // Ограничиваем смещение для лучшего UX
-            const maxDrag = 100;
-            const dragAmount = Math.max(-maxDrag, Math.min(maxDrag, diff));
-            
-            productsContainer.style.transform = `translate3d(calc(-${currentIndex * 100}% - ${dragAmount}px), 0, 0)`;
-        }, { passive: true });
+        const drag = (e) => {
+            if (!isDragging) return;
+            const currentPosition = getPositionX(e);
+            currentTranslate = prevTranslate + currentPosition - startPos;
+        };
         
-        productsContainer.addEventListener('touchend', () => {
-            if (!isSwiping) return;
+        const endDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
             
-            isSwiping = false;
-            productsContainer.style.transition = 'transform 0.3s ease';
-            
-            const diff = startX - currentX;
+            const movedBy = currentTranslate - prevTranslate;
             const threshold = 50;
             
-            if (diff > threshold) {
+            if (movedBy < -threshold) {
                 slide('next');
-            } else if (diff < -threshold) {
+            } else if (movedBy > threshold) {
                 slide('prev');
             } else {
-                updateSliderPosition(); // Возврат к исходной позиции
+                setPositionByIndex();
             }
-        }, { passive: true });
+        };
+        
+        // Touch events
+        productsContainer.addEventListener('touchstart', startDrag, { passive: true });
+        productsContainer.addEventListener('touchmove', drag, { passive: true });
+        productsContainer.addEventListener('touchend', endDrag, { passive: true });
+        
+        // Mouse events для десктопа
+        productsContainer.addEventListener('mousedown', startDrag);
+        productsContainer.addEventListener('mousemove', drag);
+        productsContainer.addEventListener('mouseup', endDrag);
+        productsContainer.addEventListener('mouseleave', endDrag);
     }
     
-    // Адаптация при изменении размера окна
+    // Адаптация при изменении размера
     window.addEventListener('resize', utils.debounce(() => {
         updateSliderPosition();
     }, 250));
@@ -1220,6 +1289,42 @@ function initImprovedTouchHandling() {
     }, { passive: true });
 }
 
+// ФИКС ДЛЯ ЗУМА И СКАЧКОВ НА МОБИЛЬНЫХ
+function initMobileZoomFix() {
+    // Предотвращение масштабирования при двойном тапе
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
+    
+    // Предотвращение масштабирования при скролле
+    document.addEventListener('touchmove', function (event) {
+        if (event.scale !== 1) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+    
+    // Фикс для iOS
+    document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('gesturechange', function (e) {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('gestureend', function (e) {
+        e.preventDefault();
+    });
+    
+    // Предотвращение bounce-эффекта на iOS
+    document.body.addEventListener('touchstart', function() {}, { passive: true });
+}
+
 // Основная функция инициализации
 function init() {
     loadFromLocalStorage();
@@ -1253,6 +1358,7 @@ function init() {
 function initAll() {
     init();
     initImprovedTouchHandling();
+    initMobileZoomFix(); // Добавляем фикс для зума
 }
 
 // Запуск при загрузке страницы

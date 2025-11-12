@@ -2972,120 +2972,144 @@ img {
     }
 }
 
-/* Адаптация Newsletter для мобильных */
+/* ФИКС ДЛЯ СЛАЙДЕРА ТОВАРОВ НА МОБИЛЬНЫХ */
 @media (max-width: 768px) {
-    .newsletter-title {
-        font-size: 32px !important;
-        letter-spacing: 4px !important;
+    .products-slider {
+        margin: 0 10px;
+        position: relative;
+        overflow: hidden;
     }
     
-    .newsletter-title-mini {
-        font-size: 14px !important;
-    }
-    
-    .newsletter-subscribe {
-        font-size: 14px;
-        padding: 0 20px;
-    }
-    
-    .newsletter-form {
-        width: 100% !important;
-        max-width: 320px;
-        flex-direction: column;
-    }
-    
-    .newsletter-form input,
-    .newsletter-form button {
-        width: 100% !important;
-    }
-}
-
-/* Адаптация продуктового слайдера для мобильных */
-@media (max-width: 768px) {
-    /* Показываем стрелки на мобильных */
-    .slider-nav {
-        display: flex !important;
-    }
-    
-    /* Полное отображение изображений на мобильных */
-    .product-image img {
-        object-fit: contain !important;
-    }
-    
-    /* Улучшенная адаптация контейнера продуктов */
     .products-container {
+        display: flex;
+        transition: transform 0.3s ease;
         gap: 15px;
         padding: 10px 5px;
+        width: max-content;
     }
     
     .product-card {
-        min-width: calc(100% - 20px) !important;
-        margin: 0 10px;
+        min-width: calc(100vw - 40px) !important;
+        flex-shrink: 0;
+        margin: 0 5px;
+        transform: translateZ(0);
     }
     
     .product-image {
         height: 300px;
     }
     
-    /* Улучшенное отображение кнопок действий на мобильных */
-    .product-actions {
-        transform: translateX(0) !important;
-        opacity: 1 !important;
-        position: static;
-        flex-direction: row;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 10px;
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain !important;
     }
     
-    .action-btn {
-        width: 45px;
-        height: 45px;
-    }
-}
-
-/* Дополнительные улучшения для очень маленьких экранов */
-@media (max-width: 480px) {
-    .product-image {
-        height: 250px;
+    /* СТРЕЛКИ ДЛЯ МОБИЛЬНЫХ */
+    .slider-nav {
+        display: flex !important;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        justify-content: space-between;
+        padding: 0 10px;
+        pointer-events: none;
+        z-index: 10;
     }
     
     .slider-nav-btn {
         width: 40px;
         height: 40px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: all;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
     }
-    
-    .newsletter-title {
-        font-size: 28px !important;
-        letter-spacing: 2px !important;
-    }
 }
 
-/* Улучшение видимости стрелок на мобильных */
-.slider-nav-btn {
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+/* ФИКС ДЛЯ ЗУМА И СКАЧКОВ НА МОБИЛЬНЫХ */
+html {
+    touch-action: pan-y;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
 }
 
-.slider-nav-btn:hover {
-    background-color: var(--accent-color);
-    transform: scale(1.1);
+body {
+    overflow-x: hidden;
+    touch-action: pan-y;
+    -webkit-user-scalable: no;
+    user-scalable: no;
+    -webkit-touch-callout: none;
 }
 
-/* Анимация для лучшей интерактивности на мобильных */
-@media (max-width: 768px) {
+/* Предотвращение масштабирования */
+* {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    max-height: 1000000px; /* Фикс для iOS */
+}
+
+/* Фикс для изображений */
+img {
+    max-width: 100%;
+    height: auto;
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+/* Улучшение производительности */
+.hero-slider,
+.products-slider,
+.slider-container1,
+.product-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    will-change: transform;
+}
+
+/* Дополнительные фиксы для очень маленьких экранов */
+@media (max-width: 480px) {
     .product-card {
-        transition: transform 0.3s ease;
+        min-width: calc(100vw - 30px) !important;
     }
     
-    .product-card:active {
-        transform: scale(0.98);
+    .product-image {
+        height: 250px;
+    }
+    
+    .slider-nav-btn {
+        width: 35px;
+        height: 35px;
     }
 }
 
-/* ФИКС ДЛЯ МОБИЛЬНОГО МЕНЮ - чтобы подменю открывалось */
+/* Гарантия что стрелки видны */
+.slider-nav {
+    display: flex !important;
+}
+
+.slider-nav-btn {
+    display: flex !important;
+}
+
+/* ФИКС ДЛЯ МОБИЛЬНОГО МЕНЮ */
 .mobile-has-dropdown.active .mobile-dropdown-menu {
     display: block !important;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .mobile-has-dropdown > a::after {
@@ -3097,23 +3121,4 @@ img {
 
 .mobile-has-dropdown.active > a::after {
     transform: rotate(45deg) !important;
-}
-
-/* Убедимся, что подменю видно */
-.mobile-dropdown-menu {
-    display: none;
-    background: rgba(0, 0, 0, 0.03);
-    padding-left: 20px;
-    border-left: 2px solid var(--accent-color);
-}
-
-.mobile-dropdown-menu li a {
-    font-size: 16px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    color: #000 !important;
-}
-
-.mobile-dropdown-menu li:last-child a {
-    border-bottom: none;
 }
