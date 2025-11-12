@@ -590,29 +590,26 @@ function initMainSlider() {
     }
 }
 
-function initProductSlider() {
+function initImprovedProductSlider() {
     const productsContainer = utils.$('.products-container');
-    const productCards = utils.$$('.product-card');
     const prevBtn = utils.$('.prev-btn');
     const nextBtn = utils.$('.next-btn');
     
-    if (!productsContainer || productCards.length === 0) return;
+    if (!productsContainer) return;
     
-    let isDragging = false;
-    let startPos = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-    let animationID;
     let currentIndex = 0;
-
+    
     function getVisibleProductsCount() {
         if (window.innerWidth < 480) return 1;
         if (window.innerWidth < 768) return 1;
         if (window.innerWidth < 1024) return 2;
         return 4;
     }
-
-    function updateProductSlider() {
+    
+    function updateSliderPosition() {
+        const productCards = utils.$$('.product-card');
+        if (productCards.length === 0) return;
+        
         const cardWidth = productCards[0].offsetWidth + 30;
         const maxIndex = productCards.length - getVisibleProductsCount();
         
@@ -620,8 +617,9 @@ function initProductSlider() {
         
         productsContainer.style.transform = `translate3d(-${currentIndex * cardWidth}px, 0, 0)`;
     }
-
+    
     function slide(direction) {
+        const productCards = utils.$$('.product-card');
         const maxIndex = productCards.length - getVisibleProductsCount();
         
         if (direction === 'next' && currentIndex < maxIndex) {
@@ -630,87 +628,63 @@ function initProductSlider() {
             currentIndex--;
         }
         
-        updateProductSlider();
+        updateSliderPosition();
     }
-
-    function touchStart(index) {
-        return function(event) {
-            isDragging = true;
-            startPos = getPositionX(event);
-            animationID = requestAnimationFrame(animation);
-            productsContainer.style.cursor = 'grabbing';
-            productsContainer.style.transition = 'none';
-        }
-    }
-
-    function touchEnd() {
-        isDragging = false;
-        cancelAnimationFrame(animationID);
-        productsContainer.style.cursor = 'grab';
-        
-        const movedBy = currentTranslate - prevTranslate;
-        const cardWidth = productCards[0].offsetWidth;
-        
-        if (movedBy < -100 && currentIndex < productCards.length - getVisibleProductsCount()) {
-            currentIndex++;
-        }
-        
-        if (movedBy > 100 && currentIndex > 0) {
-            currentIndex--;
-        }
-        
-        setPositionByIndex();
-    }
-
-    function touchMove(event) {
-        if (isDragging) {
-            const currentPosition = getPositionX(event);
-            currentTranslate = prevTranslate + currentPosition - startPos;
-        }
-    }
-
-    function getPositionX(event) {
-        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-    }
-
-    function animation() {
-        setSliderPosition();
-        if (isDragging) requestAnimationFrame(animation);
-    }
-
-    function setSliderPosition() {
-        productsContainer.style.transform = `translate3d(${currentTranslate}px, 0, 0)`;
-    }
-
-    function setPositionByIndex() {
-        const cardWidth = productCards[0].offsetWidth + 30;
-        currentTranslate = currentIndex * -cardWidth;
-        prevTranslate = currentTranslate;
-        productsContainer.style.transition = 'transform 0.3s ease';
-        setSliderPosition();
-    }
-
+    
+    // Обработчики для кнопок
     prevBtn?.addEventListener('click', () => slide('prev'));
     nextBtn?.addEventListener('click', () => slide('next'));
-
+    
+    // Обработчики для свайпа на мобильных
     if (utils.isTouchDevice()) {
-        productsContainer.style.cursor = 'grab';
+        let startX = 0;
+        let currentX = 0;
+        let isSwiping = false;
         
-        productsContainer.addEventListener('touchstart', touchStart(0));
-        productsContainer.addEventListener('touchend', touchEnd);
-        productsContainer.addEventListener('touchmove', touchMove);
+        productsContainer.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isSwiping = true;
+            productsContainer.style.transition = 'none';
+        }, { passive: true });
         
-        productsContainer.addEventListener('mousedown', touchStart(0));
-        productsContainer.addEventListener('mouseup', touchEnd);
-        productsContainer.addEventListener('mousemove', touchMove);
-        productsContainer.addEventListener('mouseleave', touchEnd);
+        productsContainer.addEventListener('touchmove', (e) => {
+            if (!isSwiping) return;
+            currentX = e.touches[0].clientX;
+            const diff = startX - currentX;
+            
+            // Ограничиваем смещение для лучшего UX
+            const maxDrag = 100;
+            const dragAmount = Math.max(-maxDrag, Math.min(maxDrag, diff));
+            
+            productsContainer.style.transform = `translate3d(calc(-${currentIndex * 100}% - ${dragAmount}px), 0, 0)`;
+        }, { passive: true });
+        
+        productsContainer.addEventListener('touchend', () => {
+            if (!isSwiping) return;
+            
+            isSwiping = false;
+            productsContainer.style.transition = 'transform 0.3s ease';
+            
+            const diff = startX - currentX;
+            const threshold = 50;
+            
+            if (diff > threshold) {
+                slide('next');
+            } else if (diff < -threshold) {
+                slide('prev');
+            } else {
+                updateSliderPosition(); // Возврат к исходной позиции
+            }
+        }, { passive: true });
     }
-
+    
+    // Адаптация при изменении размера окна
     window.addEventListener('resize', utils.debounce(() => {
-        updateProductSlider();
+        updateSliderPosition();
     }, 250));
-
-    updateProductSlider();
+    
+    // Инициализация
+    updateSliderPosition();
 }
 
 function initSliderChoice() {
@@ -974,6 +948,7 @@ function initLanguageSelector() {
     });
 }
 
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ МОБИЛЬНОГО МЕНЮ
 function initMobileMenu() {
     const mobileMenuBtn = utils.$('.mobile-menu-btn');
     const mobileMenu = utils.$('.mobile-menu');
@@ -985,8 +960,6 @@ function initMobileMenu() {
             mobileMenu.classList.add('active');
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
         });
     }
 
@@ -995,8 +968,6 @@ function initMobileMenu() {
             mobileMenu.classList.remove('active');
             overlay.classList.remove('active');
             document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
         });
     }
 
@@ -1004,15 +975,39 @@ function initMobileMenu() {
         mobileMenu.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
     });
 
+    // ФИКС: Правильная обработка выпадающих меню
     document.querySelectorAll('.mobile-has-dropdown > a').forEach(link => {
         link.addEventListener('click', function(e) {
+            // Для родительских ссылок с выпадающим меню - переключаем меню
             e.preventDefault();
             const parent = this.parentNode;
+            
+            // Закрываем все другие выпадающие меню
+            document.querySelectorAll('.mobile-has-dropdown.active').forEach(item => {
+                if (item !== parent) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Переключаем текущее меню
             parent.classList.toggle('active');
+        });
+    });
+
+    // ФИКС: Для дочерних ссылок разрешаем переход и закрываем меню
+    document.querySelectorAll('.mobile-dropdown-menu a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Разрешаем переход по всем дочерним ссылкам
+            if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
+                // Закрываем мобильное меню
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Разрешаем стандартное поведение - переход по ссылке
+                return true;
+            }
         });
     });
 
@@ -1039,9 +1034,13 @@ function initMobileMenu() {
         });
     }
 
+    // Предотвращение скролла на iOS
     if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
         mobileMenu.addEventListener('touchmove', function(e) {
-            e.preventDefault();
+            if (e.target.classList.contains('mobile-nav-links') || 
+                e.target.closest('.mobile-nav-links')) {
+                e.preventDefault();
+            }
         }, { passive: false });
     }
 }
@@ -1191,6 +1190,37 @@ function initNewsletterAnimation() {
     checkScroll();
 }
 
+// Улучшенная обработка касаний для главного слайдера
+function initImprovedTouchHandling() {
+    const heroSlider = document.querySelector('.hero-slider');
+    if (!heroSlider) return;
+
+    let startY = 0;
+    let isVerticalSwipe = false;
+
+    heroSlider.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        isVerticalSwipe = false;
+    }, { passive: true });
+
+    heroSlider.addEventListener('touchmove', (e) => {
+        if (!isVerticalSwipe) {
+            const currentY = e.touches[0].clientY;
+            const diffY = Math.abs(currentY - startY);
+            
+            // Если вертикальное движение значительное, предотвращаем горизонтальную прокрутку
+            if (diffY > 10) {
+                isVerticalSwipe = true;
+            }
+        }
+    }, { passive: true });
+
+    heroSlider.addEventListener('touchend', () => {
+        isVerticalSwipe = false;
+    }, { passive: true });
+}
+
+// Основная функция инициализации
 function init() {
     loadFromLocalStorage();
     
@@ -1201,7 +1231,7 @@ function init() {
     initSearch();
     initHeaderState();
     initMainSlider();
-    initProductSlider();
+    initImprovedProductSlider();
     initSliderChoice();
     initNewsletterAnimation();
     
@@ -1219,6 +1249,13 @@ function init() {
     });
 }
 
+// Обновление функции инициализации
+function initAll() {
+    init();
+    initImprovedTouchHandling();
+}
+
+// Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     const loadingOverlay = document.getElementById('loadingOverlay');
     const hideLoadingScreen = () => {
@@ -1230,11 +1267,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }, { once: true });
         }
     };
+    
     setTimeout(hideLoadingScreen, 1100);
-
-    init();
+    setTimeout(initAll, 1200);
 });
 
+// Обработчик изменения размера окна
+window.addEventListener('resize', utils.debounce(() => {
+    // Переинициализация слайдера при изменении размера
+    if (typeof initImprovedProductSlider === 'function') {
+        initImprovedProductSlider();
+    }
+}, 250));
+
+// Фикс для Safari на iOS
+if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    document.addEventListener('touchstart', function() {}, { passive: true });
+}
+
+// Popup functionality
 document.addEventListener('DOMContentLoaded', function() {
     const popupOverlay = document.getElementById('popup-overlay');
     if (!popupOverlay) return;

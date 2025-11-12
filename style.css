@@ -46,7 +46,22 @@ ul {
     list-style: none;
 }
 
+/* ФИКСЫ ДЛЯ АДАПТИВНОСТИ И МОБИЛЬНЫХ УСТРОЙСТВ */
 
+/* Предотвращение масштабирования при свайпе */
+html, body {
+    touch-action: pan-y;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    overflow-x: hidden;
+}
+
+/* Разрешаем выделение текста в полях ввода */
+input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
 
 /* Улучшенная производительность анимаций */
 .hero-slider,
@@ -624,6 +639,52 @@ header:hover .current-currency {
     letter-spacing: 1px;
     padding: 10px 0;
     border-bottom: 1px solid var(--light-gray);
+    color: #000;
+    transition: var(--transition);
+}
+
+.mobile-nav-links a:hover {
+    color: var(--accent-color);
+}
+
+.mobile-has-dropdown > a {
+    position: relative;
+}
+
+.mobile-has-dropdown > a::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    transition: transform 0.3s ease;
+}
+
+.mobile-has-dropdown.active > a::after {
+    transform: rotate(45deg);
+}
+
+.mobile-dropdown-menu {
+    display: none;
+    background: rgba(0, 0, 0, 0.03);
+    padding-left: 20px;
+    border-left: 2px solid var(--accent-color);
+}
+
+.mobile-has-dropdown.active .mobile-dropdown-menu {
+    display: block;
+}
+
+.mobile-dropdown-menu li {
+    border-bottom: none;
+}
+
+.mobile-dropdown-menu li a {
+    font-size: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mobile-dropdown-menu li:last-child a {
+    border-bottom: none;
 }
 
 .mobile-search {
@@ -647,14 +708,6 @@ header:hover .current-currency {
     border-bottom: 1px solid var(--light-gray);
 }
 
-.mobile-nav-links li a {
-    display: block;
-    padding: 15px 0;
-    font-size: 18px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
 mark {
     background-color: #ffeb3b;
     color: #000;
@@ -671,25 +724,6 @@ mark {
     padding: 40px 20px;
     color: var(--gray);
     font-style: italic;
-}
-
-.mobile-dropdown-menu {
-    display: none;
-    background: rgba(0, 0, 0, 0.05);
-    padding-left: 20px;
-}
-
-.mobile-dropdown-menu li {
-    border-bottom: none;
-}
-
-.mobile-dropdown-menu li a {
-    font-size: 16px;
-    padding: 10px;
-}
-
-.mobile-has-dropdown.active .mobile-dropdown-menu {
-    display: block;
 }
 
 .mobile-menu-extra {
@@ -2673,4 +2707,413 @@ mark {
 .slider-nav-btn {
     transform: translateZ(0);
     backface-visibility: hidden;
+}
+
+/* Дополнительные фиксы для адаптивности */
+
+/* Улучшенный адаптивный слайдер товаров */
+@media (max-width: 1200px) {
+    .product-card {
+        min-width: calc(33.333% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .products-container {
+        gap: 15px;
+        padding: 10px 5px;
+    }
+    
+    .product-card {
+        min-width: calc(100% - 20px) !important;
+        margin: 0 10px;
+    }
+    
+    .product-image {
+        height: 300px;
+    }
+    
+    /* Улучшенное отображение слайдера выбора */
+    .slider-container1 {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+    
+    .slide1 {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 10px;
+    }
+    
+    .image-area1 {
+        width: 100%;
+        max-width: 100%;
+        height: 400px;
+    }
+    
+    .product-info-area1 {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+    }
+    
+    .product-info-area1 .product-info-image1 {
+        height: 300px;
+    }
+    
+    /* Фикс для hotspot на мобильных */
+    .hotspot1 {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .hotspot1::after {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        min-width: calc(100% - 10px) !important;
+        margin: 0 5px;
+    }
+    
+    .product-image {
+        height: 250px;
+    }
+    
+    .image-area1 {
+        height: 300px;
+    }
+    
+    .product-info-area1 .product-info-image1 {
+        height: 250px;
+    }
+    
+    .product-name1 {
+        font-size: 1em;
+        height: auto;
+        margin-bottom: 10px;
+    }
+}
+
+/* Фикс для заголовков секций на мобильных */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 32px;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+    
+    .slider-container1-block_title-mini,
+    .newsletter-title-mini {
+        font-size: 16px;
+    }
+}
+
+/* Улучшенные стили для кнопок на мобильных */
+@media (max-width: 768px) {
+    .hero-slider-btn,
+    .new-arrivals-btn,
+    .section-3-btn,
+    .view-product-btn1,
+    .elusive-btn,
+    .newsletter-form button {
+        padding: 12px 25px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .section-3_block div {
+        right: 20px;
+        width: auto;
+        height: auto;
+        padding: 20px;
+        align-items: flex-end;
+    }
+}
+
+/* Фикс для футера на мобильных */
+@media (max-width: 768px) {
+    .footer-container-block {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .footer-section {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .footer-container-block-2 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-container-block-3 {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .payment-icons {
+        justify-content: center;
+    }
+}
+
+/* Предотвращение zoom на iOS при фокусе на инпутах */
+@media (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        font-size: 16px; /* Предотвращает zoom в iOS */
+    }
+}
+
+/* Улучшенная производительность для анимаций */
+.hero-slider,
+.products-slider,
+.slider-container1,
+.product-card,
+.slide {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+}
+
+/* Фикс для скролла на iOS */
+.mobile-menu {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Улучшенные стили для навигации слайдера */
+.slider-nav {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .slider-nav {
+        display: none; /* Скрываем кнопки на мобильных, оставляем только свайп */
+    }
+}
+
+/* Фикс для изображений */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Улучшенные стили для newsletter */
+.newsletter-form {
+    max-width: 400px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .newsletter-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100%;
+    }
+}
+
+/* Фикс для секции 3 блоков на мобильных */
+@media (max-width: 768px) {
+    .section-3 {
+        flex-direction: column;
+    }
+    
+    .section-3_block {
+        height: 50vh;
+        min-height: 300px;
+    }
+}
+
+/* Улучшенные стили для уведомлений */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 15px 25px;
+    border-radius: 5px;
+    z-index: 2000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+    font-size: 14px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+    .notification {
+        top: 80px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+    
+    .notification.show {
+        transform: translateY(0);
+    }
+}
+
+/* Адаптация Newsletter для мобильных */
+@media (max-width: 768px) {
+    .newsletter-title {
+        font-size: 32px !important;
+        letter-spacing: 4px !important;
+    }
+    
+    .newsletter-title-mini {
+        font-size: 14px !important;
+    }
+    
+    .newsletter-subscribe {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+    
+    .newsletter-form {
+        width: 100% !important;
+        max-width: 320px;
+        flex-direction: column;
+    }
+    
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100% !important;
+    }
+}
+
+/* Адаптация продуктового слайдера для мобильных */
+@media (max-width: 768px) {
+    /* Показываем стрелки на мобильных */
+    .slider-nav {
+        display: flex !important;
+    }
+    
+    /* Полное отображение изображений на мобильных */
+    .product-image img {
+        object-fit: contain !important;
+    }
+    
+    /* Улучшенная адаптация контейнера продуктов */
+    .products-container {
+        gap: 15px;
+        padding: 10px 5px;
+    }
+    
+    .product-card {
+        min-width: calc(100% - 20px) !important;
+        margin: 0 10px;
+    }
+    
+    .product-image {
+        height: 300px;
+    }
+    
+    /* Улучшенное отображение кнопок действий на мобильных */
+    .product-actions {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        position: static;
+        flex-direction: row;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .action-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Дополнительные улучшения для очень маленьких экранов */
+@media (max-width: 480px) {
+    .product-image {
+        height: 250px;
+    }
+    
+    .slider-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .newsletter-title {
+        font-size: 28px !important;
+        letter-spacing: 2px !important;
+    }
+}
+
+/* Улучшение видимости стрелок на мобильных */
+.slider-nav-btn {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.slider-nav-btn:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+/* Анимация для лучшей интерактивности на мобильных */
+@media (max-width: 768px) {
+    .product-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .product-card:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ФИКС ДЛЯ МОБИЛЬНОГО МЕНЮ - чтобы подменю открывалось */
+.mobile-has-dropdown.active .mobile-dropdown-menu {
+    display: block !important;
+}
+
+.mobile-has-dropdown > a::after {
+    content: '+' !important;
+    position: absolute;
+    right: 0;
+    transition: transform 0.3s ease;
+}
+
+.mobile-has-dropdown.active > a::after {
+    transform: rotate(45deg) !important;
+}
+
+/* Убедимся, что подменю видно */
+.mobile-dropdown-menu {
+    display: none;
+    background: rgba(0, 0, 0, 0.03);
+    padding-left: 20px;
+    border-left: 2px solid var(--accent-color);
+}
+
+.mobile-dropdown-menu li a {
+    font-size: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    color: #000 !important;
+}
+
+.mobile-dropdown-menu li:last-child a {
+    border-bottom: none;
 }
