@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+   
+    <link rel="stylesheet" href="./style.css">
+     <link rel="stylesheet" href="./shop.css">
+    
+</head>
+<body>
+
+  <!-- Шапка сайту -->
+    <header>
+        <div class="header-top">
+            <div class="nav-section">
+                <nav>
+                    <ul class="nav-links">
+                        <li class="has-dropdown">
+                            <a href="./shop.html" data-translate="shop">Shop</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-translate="all">All</a></li>
+                                <li><a href="#" data-translate="tops">Tops</a></li>
+                                <li><a href="#" data-translate="bottoms">Bottoms</a></li>
+                                <li><a href="#" data-translate="accessories">Accessories</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" data-translate="about">About</a></li>
+                        <li><a href="./contact.html" data-translate="contacts">Contacts</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <a href="./index.html">
+                <div class="logo">4<span>FLOW</span></div>
+            </a>
+            <div class="header-icons">
+                <i class="fas fa-search search-btn"></i>
+                <div class="currency-dropdown">
+                    <span class="current-currency">EUR €</span>
+                    <div class="currency-options">
+                        <div data-currency="EUR">EUR €</div>
+                        <div data-currency="USD">USD $</div>
+                        <div data-currency="UAH">UAH ₴</div>
+                        <div data-currency="GBP">GBP £</div>
+                    </div>
+                </div>
+                <div class="wishlist-icon">
+                    <i class="fas fa-heart"></i>
+                    <span class="wishlist-count">0</span>
+                </div>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Мобільне меню -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-close">
+            <i class="fas fa-times"></i>
+        </div>
+        <nav class="mobile-nav-links">
+            <ul>
+                <li class="mobile-has-dropdown">
+                    <a href="./shop.html" data-translate="shop">Shop</a>
+                    <ul class="mobile-dropdown-menu">
+                        <li><a href="#" data-translate="all">All</a></li>
+                        <li><a href="#" data-translate="tops">Tops</a></li>
+                        <li><a href="#" data-translate="bottoms">Bottoms</a></li>
+                        <li><a href="#" data-translate="accessories">Accessories</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" data-translate="about">About</a></li>
+                <li><a href="./contact.html" data-translate="contacts">Contacts</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Добавляем элементы валюты и поиска в мобильное меню -->
+        <div class="mobile-menu-extra">
+            <div class="mobile-currency-dropdown">
+                <span class="mobile-current-currency">EUR €</span>
+                <div class="mobile-currency-options">
+                    <div data-currency="EUR">EUR €</div>
+                    <div data-currency="USD">USD $</div>
+                    <div data-currency="UAH">UAH ₴</div>
+                    <div data-currency="GBP">GBP £</div>
+                </div>
+            </div>
+            
+            <div class="mobile-search">
+                <input type="text" class="mobile-search-input" placeholder="Search products...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Пошук -->
+    <div class="search-overlay">
+        <div class="search-container">
+            <div class="search-close">
+                <i class="fas fa-times"></i>
+            </div>
+            <input type="text" class="search-input" placeholder="Search products...">
+            <div class="search-results">
+                <!-- Результати пошуку будуть додаватися динамічно -->
+            </div>
+        </div>
+    </div>
+
+<!-- Корзина -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h2 data-translate="Your Cart">Your Cart</h2>
+            <i class="fas fa-times close-cart"></i>
+        </div>
+        <div class="cart-items">
+            <!-- Товари додаються динамічно -->
+        </div>
+        <div class="cart-total">
+            <span data-translate="Total:">Total:</span>
+            <span class="total-amount">€0</span>
+        </div>
+        <a href="#" class="btn checkout-btn" data-translate="Checkout">Checkout</a>
+    </div>
+
+    <!-- Сайдбар вибраного -->
+    <div class="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h2 data-translate="Wishlist">Wishlist</h2>
+            <i class="fas fa-times close-wishlist"></i>
+        </div>
+        <div class="wishlist-items">
+            <!-- Товари додаються динамічно -->
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Product -->
+    <div class="product-card">
+        <div class="product-images">
+            <img id="front-image" src="./lots/01.jpg" alt="Front View" class="product-image">
+            <img id="back-image" src="./lots/02.jpg" alt="Back View" class="product-image">
+        </div>
+        <div class="product-details">
+            <h1 class="product-title">FORM BRA CROP</h1>
+            <p class="product-price">€2,676.00 UAH</p>
+            <p class="product-reviews">27 Reviews</p>
+            <a href="#" class="see-on-you">See it on you</a>
+
+            <div class="color-selector">
+                <h3>COLOUR: <span id="selected-color-name">FAWN</span></h3>
+                <div class="color-options">
+                    <div class="color-option black" data-color="black"></div>
+                    <div class="color-option white" data-color="white"></div>
+                </div>
+            </div>
+
+            <div class="size-selector">
+                <h3>SIZE: <span id="selected-size-name">XXS</span> <span>SIZE CHART</span></h3>
+                <select class="size-dropdown">
+                    <option value="xxs">XXS</option>
+                    <option value="xs">XS</option>
+                    <option value="s">S</option>
+                    <option value="m">M</option>
+                    <option value="l">L</option>
+                </select>
+            </div>
+
+            <p class="in-stock">In stock</p>
+            <button class="add-to-cart">Add to cart</button>
+        </div>
+    </div>
+
+
+    <!-- Футер -->
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-container-block">
+                <div class="footer-section">
+                    <div class="icon">
+                        <i class="fas fa-paper-plane icons-new"></i>
+                    </div>
+                    <p data-translate="HERE FOR YOU"><strong>HERE FOR YOU</strong></p>
+                    <p>
+                        <span data-translate="Email us at">Email us at</span>
+                        <a href="mailto:support@lavarice.com">support@lavarice.com</a>
+                        <span data-translate="or">or</span>
+                        <a href="#">Instagram</a>
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <div class="icon">
+                        <i class="fas fa-credit-card icons-new"></i>
+                    </div>
+                    <p data-translate="DUTIES AND TAXES MAY VARY."><strong>DUTIES AND TAXES MAY VARY.</strong></p>
+                    <p data-translate="Extra charges may apply outside of EU members.">Extra charges may apply outside
+                        of EU members.</p>
+                </div>
+            </div>
+
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-container-block-2">
+                <div class="footer-section">
+                    <h3 data-translate="BRAND">BRAND</h3>
+                    <p><a href="#" data-translate="About Us">About Us</a></p>
+                    <p><a href="#" data-translate="Contacts">Contacts</a></p>
+                    <p><a href="#" data-translate="Terms of Service">Terms of Service</a></p>
+                    <p><a href="#" data-translate="CCPA">CCPA</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="SHOP">SHOP</h3>
+                    <p><a href="#" data-translate="Size Guide">Size Guide</a></p>
+                    <p><a href="#" data-translate="Shipment & Delivery">Shipment & Delivery</a></p>
+                    <p><a href="#" data-translate="Returns & Exchanges">Returns & Exchanges</a></p>
+                    <p><a href="#" data-translate="Duties & Taxes">Duties & Taxes</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="LANGUAGE">LANGUAGE</h3>
+                    <div class="language-selector">
+                        <span class="language-option active" data-lang="en">English</span> |
+                        <span class="language-option" data-lang="uk">Українська</span>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                </div>
+
+
+
+            </div>
+            <div class="footer-container-block-3">
+                <div class="currency">EUR €</div>
+                <div class="copyright">© 2025 - 4FLOW</div>
+                <div class="payment-methods">
+
+                    <div class="payment-icons">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-mastercard"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-amex"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-apple-pay"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-google-pay"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <script src="./script.js">
+        
+    </script>
+</body>
+</html>

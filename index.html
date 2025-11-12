@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>4FLOW</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+
+    <!-- Шапка сайту -->
+    <header>
+        <div class="header-top">
+            <div class="nav-section">
+                <nav>
+                    <ul class="nav-links">
+                        <li class="has-dropdown">
+                            <a href="./shop.html" data-translate="shop">Shop</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-translate="all">All</a></li>
+                                <li><a href="#" data-translate="tops">Tops</a></li>
+                                <li><a href="#" data-translate="bottoms">Bottoms</a></li>
+                                <li><a href="#" data-translate="accessories">Accessories</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" data-translate="about">About</a></li>
+                        <li><a href="./contact.html" data-translate="contacts">Contacts</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <a href="./index.html">
+                <div class="logo">4<span>FLOW</span></div>
+            </a>
+            <div class="header-icons">
+                <i class="fas fa-search search-btn"></i>
+                <div class="currency-dropdown">
+                    <span class="current-currency">EUR €</span>
+                    <div class="currency-options">
+                        <div data-currency="EUR">EUR €</div>
+                        <div data-currency="USD">USD $</div>
+                        <div data-currency="UAH">UAH ₴</div>
+                        <div data-currency="GBP">GBP £</div>
+                    </div>
+                </div>
+                <div class="wishlist-icon">
+                    <i class="fas fa-heart"></i>
+                    <span class="wishlist-count">0</span>
+                </div>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Мобільне меню -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-close">
+            <i class="fas fa-times"></i>
+        </div>
+        <nav class="mobile-nav-links">
+            <ul>
+                <li class="mobile-has-dropdown">
+                    <a href="./shop.html" data-translate="shop">Shop</a>
+                    <ul class="mobile-dropdown-menu">
+                        <li><a href="#" data-translate="all">All</a></li>
+                        <li><a href="#" data-translate="tops">Tops</a></li>
+                        <li><a href="#" data-translate="bottoms">Bottoms</a></li>
+                        <li><a href="#" data-translate="accessories">Accessories</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" data-translate="about">About</a></li>
+                <li><a href="./contact.html" data-translate="contacts">Contacts</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Добавляем элементы валюты и поиска в мобильное меню -->
+        <div class="mobile-menu-extra">
+            <div class="mobile-currency-dropdown">
+                <span class="mobile-current-currency">EUR €</span>
+                <div class="mobile-currency-options">
+                    <div data-currency="EUR">EUR €</div>
+                    <div data-currency="USD">USD $</div>
+                    <div data-currency="UAH">UAH ₴</div>
+                    <div data-currency="GBP">GBP £</div>
+                </div>
+            </div>
+            
+            <div class="mobile-search">
+                <input type="text" class="mobile-search-input" placeholder="Search products...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Пошук -->
+    <div class="search-overlay">
+        <div class="search-container">
+            <div class="search-close">
+                <i class="fas fa-times"></i>
+            </div>
+            <input type="text" class="search-input" placeholder="Search products...">
+            <div class="search-results">
+                <!-- Результати пошуку будуть додаватися динамічно -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Головний слайдер -->
+    <section class="hero-slider">
+        <div class="slide active" style="background-image: url('./images/1.png');">
+            <div class="slide-content">
+                <h2 data-translate="NEW IN">NEW IN</h2>
+                <a href="#" class="hero-slider-btn" data-translate="VIEW ALL">VIEW ALL</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('./images/2.png');">
+            <div class="slide-content">
+                <h2 data-translate="ATHLEISURE">ATHLEISURE</h2>
+                <a href="#" class="hero-slider-btn" data-translate="VIEW ALL">VIEW ALL</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url(./images/3.png);">
+            <div class="slide-content">
+                <h2 data-translate="Autumn Collection">Autumn Collection</h2>
+                <a href="#" class="hero-slider-btn" data-translate="VIEW ALL">VIEW ALL</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('./images/5.png');">
+            <div class="slide-content">
+                <h2 data-translate="ESSENTIALS">ESSENTIALS</h2>
+                <a href="#" class="hero-slider-btn" data-translate="VIEW ALL">VIEW ALL</a>
+            </div>
+        </div>
+
+        <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+
+        </div>
+    </section>
+
+    <!-- Секція нових надходжень -->
+    <section class="new-arrivals">
+
+        <h2 class="section-title" data-translate="NEW">NEW</h2>
+        <div class="products-slider">
+            <div class="products-container">
+                <!-- Товар 1 -->
+                <div class="product-card" data-id="1">
+                    <div class="product-image">
+                        <img src="./lots/1.jpg" alt="GISELE SHINE COLD" class="main-image">
+                        <img src="./lots/2.jpg" alt="GISELE SHINE COLD" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="1"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="1"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">TOP GISELE SHINE COLD</h3>
+                        <div class="product-price">€48,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 2 -->
+                <div class="product-card" data-id="2">
+                    <div class="product-image">
+                        <img src="./lots/3.jpg" alt="GISELE SHINE COLD" class="main-image">
+                        <img src="./lots/4.jpg" alt="GISELE SHINE COLD" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="2"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="2"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">BOTTOM GISELE SHINE COLD</h3>
+                        <div class="product-price">€47,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 3 -->
+                <div class="product-card" data-id="3">
+                    <div class="product-image">
+                        <img src="./lots/5.jpg" alt="GISELE SHINE GREEN" class="main-image">
+                        <img src="./lots/6.jpg" alt="GISELE SHINE GREEN" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="3"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="3"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">TOP GISELE SHINE GREEN</h3>
+                        <div class="product-price">€48,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 4 -->
+                <div class="product-card" data-id="4">
+                    <div class="product-image">
+                        <img src="./lots/7.jpg" alt="GISELE SHINE GREEN" class="main-image">
+                        <img src="./lots/8.jpg" alt="GISELE SHINE GREEN" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="4"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="4"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">BOTTOM GISELE SHINE GREEN</h3>
+                        <div class="product-price">€47,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 5 -->
+                <div class="product-card" data-id="5">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"
+                            alt="GISELE SHINE BLUE" class="main-image">
+                        <img src="https://images.unsplash.com/photo-1582552938357-32b906df40cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+                            alt="GISELE SHINE BLUE" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="5"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="5"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">TOP GISELE SHINE BLUE</h3>
+                        <div class="product-price">€49,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 6 -->
+                <div class="product-card" data-id="6">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1582552938357-32b906df40cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+                            alt="GISELE SHINE BLUE" class="main-image">
+                        <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"
+                            alt="GISELE SHINE BLUE" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="6"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="6"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">BOTTOM GISELE SHINE BLUE</h3>
+                        <div class="product-price">€48,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 7 -->
+                <div class="product-card" data-id="7">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
+                            alt="GISELE SHINE PINK" class="main-image">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
+                            alt="GISELE SHINE PINK" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="7"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="7"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">TOP GISELE SHINE PINK</h3>
+                        <div class="product-price">€49,95</div>
+                    </div>
+                </div>
+
+                <!-- Товар 8 -->
+                <div class="product-card" data-id="8">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
+                            alt="GISELE SHINE PINK" class="main-image">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
+                            alt="GISELE SHINE PINK" class="hover-image">
+                        <div class="product-actions">
+                            <div class="action-btn wishlist-btn" data-id="8"><i class="fas fa-heart"></i></div>
+                            <div class="action-btn cart-btn" data-id="8"><i class="fas fa-shopping-cart"></i></div>
+
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">BOTTOM GISELE SHINE PINK</h3>
+                        <div class="product-price">€48,95</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-nav">
+                <div class="slider-nav-btn prev-btn"><i class="fas fa-chevron-left"></i></div>
+                <div class="slider-nav-btn next-btn"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+
+        <a href="#">
+            <button class="new-arrivals-btn hero-slider-btn" data-translate="SHOP ALL">SHOP ALL</button>
+        </a>
+
+    </section>
+
+    <!-- Корзина -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h2 data-translate="Your Cart">Your Cart</h2>
+            <i class="fas fa-times close-cart"></i>
+        </div>
+        <div class="cart-items">
+            <!-- Товари додаються динамічно -->
+        </div>
+        <div class="cart-total">
+            <span data-translate="Total:">Total:</span>
+            <span class="total-amount">€0</span>
+        </div>
+        <a href="#" class="btn checkout-btn" data-translate="Checkout">Checkout</a>
+    </div>
+
+    <!-- Сайдбар вибраного -->
+    <div class="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h2 data-translate="Wishlist">Wishlist</h2>
+            <i class="fas fa-times close-wishlist"></i>
+        </div>
+        <div class="wishlist-items">
+            <!-- Товари додаються динамічно -->
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Секція з трьох блоків -->
+    <div class="section-3 ">
+        <div class="section-3_block" style="background-image: url('./lots/1/1.jpg');">
+            <div>
+                <h2 class="section-3_block-title" data-translate="TOPS">TOPS</h2>
+                <a href="#" class="section-3-btn" data-translate="VIEW ALL">VIEW ALL</a>
+            </div>
+
+        </div>
+        <div class="section-3_block" style="background-image: url('./lots/1/2.jpg')">
+            <div>
+                <h2 class="section-3_block-title" data-translate="TOPS">TOPS</h2>
+                <a href="" class="section-3-btn" data-translate="SHOP ALL">SHOP ALL</a>
+            </div>
+
+        </div>
+        <div class="section-3_block" style="background-image: url('./lots/1/3.jpg');">
+            <div>
+                <h2 class="section-3_block-title" data-translate="TOPS">TOPS</h2>
+                <a href="" class="section-3-btn" data-translate="SHOP ALL">SHOP ALL</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- NEW SLIDERRRRRRRRRRRR -->
+    <div class="slider-container1-block">
+        <h4 class="slider-container1-block_title-mini" data-translate="Sets">Sets</h4>
+        <h2 class="section-title" data-translate="Shop the look">Shop the look</h2>
+    </div>
+
+    <div class="slider-container1">
+
+        <div class="slider-wrapper1">
+            <!-- Slide 1 -->
+            <div class="slide1" data-slide-id="1">
+                <div class="image-area1">
+                    <img src="./lots/01.jpg"
+                        alt="Model wearing Top With Raised Seams Sport">
+                    <!-- Hotspots for Slide 1 -->
+                    <div class="hotspot1" style="top: 25%; left: 45%;" data-product-id="101"></div>
+                    <div class="hotspot1" style="bottom: 20%; right: 35%;" data-product-id="102"></div>
+                </div>
+                <div class="product-info-area1">
+                    <img class="product-info-image1" src="./lots/02.jpg"
+                        alt="Top With Raised Seams Sport">
+
+                    <p class="product-name1">TOP WITH RAISED SEAMS SPORT</p>
+                    <p class="product-color1">WHITE</p>
+                   <!-- В slider-wrapper1 замените цены на такие: -->
+<p class="product-price1" data-price-eur="85.95">€85.95</p>
+
+
+                    <button class="view-product-btn1" data-translate="VIEW PRODUCT">VIEW PRODUCT</button>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide1" data-slide-id="2">
+                <div class="image-area1">
+                    <img src="./lots/04.jpg" alt="Model wearing Athletic Bra Top">
+                    <!-- Hotspots for Slide 2 -->
+                    <div class="hotspot1" style="top: 30%; left: 30%;" data-product-id="201"></div>
+                    <div class="hotspot1" style="bottom: 15%; right: 40%;" data-product-id="202"></div>
+                </div>
+                <div class="product-info-area1">
+                    <img class="product-info-image1" src="./lots/05.jpg" alt="Athletic Bra Top">
+                    <p class="product-name1">ATHLETIC BRA TOP</p>
+                    <p class="product-color1">BLACK</p>
+                    <p class="product-price1" data-price-eur="75.00">€75.00</p>
+                    <button class="view-product-btn1" data-translate="VIEW PRODUCT">VIEW PRODUCT</button>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide1 slide-31" data-slide-id="3">
+                <div class="image-area1">
+                    <img src="./lots/07.jpg" alt="Model wearing High-Waisted Leggings">
+                    <!-- Hotspots for Slide 3 -->
+                    <div class="hotspot1" style="top: 20%; left: 50%;" data-product-id="301"></div>
+                    <div class="hotspot1" style="bottom: 10%; left: 40%;" data-product-id="302"></div>
+                </div>
+                <div class="product-info-area1">
+                    <img class="product-info-image1" src="./lots/08.jpg" alt="High-Waisted Leggings">
+                    <p class="product-name1">HIGH-WAISTED LEGGINGS</p>
+                    <p class="product-color1">GREY</p>
+                    <p class="product-price1" data-price-eur="99.50">€99.50</p>
+                    <button class="view-product-btn1" data-translate="VIEW PRODUCT">VIEW PRODUCT</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="slider-dots1 "></div>
+
+    <!-- Elusive -->
+    <div class="elusive" style="background-image: url('./images/6.png')">
+        <h3 class="slider-container1-block_title-mini" data-translate="SS 2025">SS 2025</h3>
+        <h2 class="section-title" data-translate="ELUSIVE">ELUSIVE</h2>
+        <a class="elusive-btn" href="" data-translate="view">view</a>
+    </div>
+
+    <!-- newsletter -->
+    <div class="newsletter">
+        <!-- Добавляем этот блок с линиями -->
+        <div class="newsletter-lines">
+            <div class="newsletter-line left-1"></div>
+            <div class="newsletter-line left-2"></div>
+            <div class="newsletter-line left-3"></div>
+            <div class="newsletter-line right-1"></div>
+            <div class="newsletter-line right-2"></div>
+            <div class="newsletter-line right-3"></div>
+        </div>
+
+        <div class="newsletter-block-animation">
+            <h3 class="newsletter-title-mini" data-translate="Keep updated">Keep updated</h3>
+            <h2 class="newsletter-title" data-translate="Newsletter">Newsletter</h2>
+        </div>
+        <p class="newsletter-subscribe">
+            <span
+                data-translate="Subscribe to our newsletter and receive emails about the latest arrivals, promotions and sales!">Subscribe
+                to our newsletter and receive emails about the latest arrivals, promotions and sales!</span><br>
+            <span data-translate="By leaving my email, I confirm my acceptance of the terms of the">By leaving my email,
+                I confirm my acceptance of the terms of the</span>
+            <a class="newsletter-btn" href="" data-translate="user agreement and privacy policy">user agreement and
+                privacy policy</a>
+        </p>
+        <form class="newsletter-form">
+            <input class="newsletter-form-email" placeholder="e-mail" type="email">
+            <button class="newsletter-form-btn hero-slider-btn" type="button"
+                data-translate="SUBSCRIBE">SUBSCRIBE</button>
+        </form>
+
+        <!-- Всплывающее окно -->
+        <div id="popup-overlay" class="popup-overlay">
+            <div class="popup-content">
+                <span class="popup-close-button">&times;</span>
+                <h2 class="popup-title">UNLOCK 5% OFF!</h2>
+                <p class="popup-text">Enter your email to get exclusive promo code for your next purchase.</p>
+                <form class="popup-form">
+                    <input type="email" class="popup-email-input" placeholder="email@example.com" required>
+                    <button type="submit" class="popup-submit-button">GET DISCOUNT</button>
+                </form>
+                <a href="#" class="popup-no-thanks">No, thanks</a>
+            </div>
+        </div>
+
+        <!-- Кнопка "Наверх" -->
+        <button id="popup-scroll-to-top" class="popup-scroll-to-top">
+            <span>
+                <!-- SVG стрелка -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+            </span>
+        </button>
+    </div>
+
+    <!-- Футер -->
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-container-block">
+                <div class="footer-section">
+                    <div class="icon">
+                        <i class="fas fa-paper-plane icons-new"></i>
+                    </div>
+                    <p data-translate="HERE FOR YOU"><strong>HERE FOR YOU</strong></p>
+                    <p>
+                        <span data-translate="Email us at">Email us at</span>
+                        <a href="mailto:support@lavarice.com">support@lavarice.com</a>
+                        <span data-translate="or">or</span>
+                        <a href="#">Instagram</a>
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <div class="icon">
+                        <i class="fas fa-credit-card icons-new"></i>
+                    </div>
+                    <p data-translate="DUTIES AND TAXES MAY VARY."><strong>DUTIES AND TAXES MAY VARY.</strong></p>
+                    <p data-translate="Extra charges may apply outside of EU members.">Extra charges may apply outside
+                        of EU members.</p>
+                </div>
+            </div>
+
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-container-block-2">
+                <div class="footer-section">
+                    <h3 data-translate="BRAND">BRAND</h3>
+                    <p><a href="#" data-translate="About Us">About Us</a></p>
+                    <p><a href="#" data-translate="Contacts">Contacts</a></p>
+                    <p><a href="#" data-translate="Terms of Service">Terms of Service</a></p>
+                    <p><a href="#" data-translate="CCPA">CCPA</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="SHOP">SHOP</h3>
+                    <p><a href="#" data-translate="Size Guide">Size Guide</a></p>
+                    <p><a href="#" data-translate="Shipment & Delivery">Shipment & Delivery</a></p>
+                    <p><a href="#" data-translate="Returns & Exchanges">Returns & Exchanges</a></p>
+                    <p><a href="#" data-translate="Duties & Taxes">Duties & Taxes</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h3 data-translate="LANGUAGE">LANGUAGE</h3>
+                    <div class="language-selector">
+                        <span class="language-option active" data-lang="en">English</span> |
+                        <span class="language-option" data-lang="uk">Українська</span>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                </div>
+
+
+
+            </div>
+            <div class="footer-container-block-3">
+                <div class="currency">EUR €</div>
+                <div class="copyright">© 2025 - 4FLOW</div>
+                <div class="payment-methods">
+
+                    <div class="payment-icons">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-mastercard"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-amex"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-apple-pay"></i>
+                        </div>
+                        <div class="payment-icon">
+                            <i class="fab fa-google-pay"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-container">
+            <div class="shapes-container">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="loading-text" id="loadingText">
+                    <span>4</span><span>F</span><span>L</span><span>O</span><span>W</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./script.js"></script>
+
+</body>
+
+</html>
