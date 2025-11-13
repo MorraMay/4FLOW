@@ -539,3 +539,10 @@ header {
     width: 100%;
     text-transform: uppercase;
 }
+@media (max-width: 576px) {
+    .controls-bar2 {
+    gap: 10px;
+    flex-direction: column;
+   
+}
+}
