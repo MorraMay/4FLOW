@@ -1,7 +1,15 @@
 
-header{
-    background-color: #000;
-}
+header {
+        background-color: var(--secondary-color);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 0 15px;
+    }
+
+    header .nav-links a,
+    header .header-icons i,
+    header .logo {
+        color: var(--primary-color);
+    }
 
 /* PRODUCT CARD STYLES (без modal- префикса для основных товаров) */
 .product-card {

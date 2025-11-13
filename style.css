@@ -21,9 +21,9 @@
 }
 
 html {
-  /*   -webkit-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%; */
+    text-size-adjust: 100%;
     overflow-x: hidden;
 }
 
@@ -33,8 +33,8 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     scroll-behavior: smooth;
-   /*  touch-action: pan-y;
-    -webkit-overflow-scrolling: touch; */
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
 }
 
 a {
@@ -50,9 +50,9 @@ ul {
 
 /* Предотвращение масштабирования при свайпе */
 html, body {
-  /*   touch-action: pan-y;
+    touch-action: pan-y;
     -webkit-touch-callout: none;
-    -webkit-user-select: none; */
+    -webkit-user-select: none;
     user-select: none;
     overflow-x: hidden;
 }
@@ -2307,16 +2307,16 @@ mark {
 /* Исправления для мобильных устройств */
 @media (max-width: 768px) {
     html {
-    /*     -webkit-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
-        text-size-adjust: 100%; */
+        text-size-adjust: 100%;
         overflow-x: hidden;
     }
     
     body {
         overflow-x: hidden;
-      /*   touch-action: pan-y;
-        -webkit-overflow-scrolling: touch; */
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
     }
     
     header {
@@ -2392,9 +2392,9 @@ mark {
     
     .product-card {
         flex-shrink: 0; 
-       /*  height: 500px; */
+     
         
-        min-width: calc(100% - 20px) !important;
+      /*   min-width: calc(100% - 20px) !important; */
         
        /*  margin: 0 auto; */
        /*  transform: translateZ(0); */
@@ -2577,9 +2577,9 @@ mark {
     }
     
     /* Фикс для скролла */
-   /*  .mobile-menu {
+     .mobile-menu {
         -webkit-overflow-scrolling: touch;
-    } */
+    } 
 }
 
 @media (max-width: 576px) {
@@ -2600,7 +2600,7 @@ mark {
     font-size: 33px;
 }
     .product-card {
-        min-width: 100%;
+        /* min-width: 100%; */
     }
 
     .slider-dots {
@@ -2744,7 +2744,7 @@ mark {
     }
     
     .product-card {
-        min-width: calc(100% - 20px) !important;
+        /* min-width: calc(100% - 20px) !important; */
         margin: 0 5px;
     }
     
@@ -2795,7 +2795,7 @@ mark {
 
 @media (max-width: 480px) {
     .product-card {
-        min-width: calc(100% - 10px) !important;
+        /* min-width: calc(100% - 10px) !important; */
 
       /*   margin: 0 5px; */
     }
