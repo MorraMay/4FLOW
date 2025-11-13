@@ -2990,22 +2990,27 @@ mark {
     }
 }
 
-/* Исправления для адаптивного слайдера товаров */
+/* Убираем стрелки навигации */
+/* .slider-nav {
+    display: none !important;
+} */
+
+/* Исправления для product-card */
 .products-slider {
     position: relative;
     overflow: hidden;
     margin: 0 auto;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 5px;
 }
 
 .products-container {
     display: flex;
     transition: transform 0.3s ease;
-    gap: 15px;
+    gap: 10px;
     padding: 10px 0;
     cursor: grab;
-   /*  width: max-content; */
+    width: max-content;
 }
 
 .product-card {
@@ -3016,121 +3021,26 @@ mark {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 280px; /* Фиксированная ширина для мобильных */
+    width: 200px; /* Фиксированная ширина 200px */
+    border: 1px solid #f0f0f0;
 }
 
-/* Адаптивные стили для мобильных */
-@media (max-width: 768px) {
-    .products-container {
-        gap: 10px;
-        padding: 5px 0;
-    }
-    
-    .product-card {
-        width: 280px; /* Ширина карточки на мобильных */
-        margin: 0 5px;
-    }
-    
-    .product-image {
-        height: 350px;
-        width: 100%;
-    }
-    
-    .product-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .product-info {
-        padding: 15px 10px;
-        display: block !important; /* Принудительно показываем информацию */
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-    
-    .product-title {
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-    
-    .product-price {
-        font-size: 16px;
-    }
-    
-    /* Показываем кнопки действий на мобильных */
-    .product-actions {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        transform: translateX(0) !important;
-        opacity: 1 !important;
-    }
-    
-    .action-btn {
-        width: 35px;
-        height: 35px;
-        background-color: rgba(255, 255, 255, 0.9);
-        
-    }
-    .action-btn i{
-      
-        width: 35px;
-        height: 35px;
-        margin-top: 10px;
-        position: relative;
-        
-        
-    }
-     .action-btn i::before{
-         position: absolute; 
-        left:  23%;
-        top: 23%;
-     
-     }
-    /* Убедимся, что стрелки видны на мобильных */
-    .slider-nav {
-        display: flex !important;
-        position: absolute;
-        top: 50%;
-        left: 5px;
-        right: 5px;
-        transform: translateY(-50%);
-        justify-content: space-between;
-        pointer-events: none;
-        z-index: 5;
-    }
-    
-    .slider-nav-btn {
-        width: 40px;
-        height: 40px;
-        background-color: rgba(255, 255, 255, 0.9);
-        pointer-events: all;
-    }
+.product-image {
+    position: relative;
+    height: 450px; /* Уменьшаем высоту для узких карточек */
+    overflow: hidden;
+    width: 100%;
 }
 
-@media (max-width: 480px) {
-    .product-card {
-        width: 260px;
-    }
-    
-    .product-image {
-        /* height: 300px; */
-    }
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+    display: block;
 }
 
-/* Убедимся, что все элементы product-card видны */
-.product-card * {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-}
-
-/* Фикс для hover эффектов на мобильных */
+/* Убираем hover эффекты на мобильных */
 @media (max-width: 768px) {
     .product-card:hover .product-image img.main-image {
         opacity: 1 !important;
@@ -3144,47 +3054,172 @@ mark {
         display: none; /* Скрываем hover изображение на мобильных */
     }
 }
-/* Гарантируем, что все содержимое product-card видно */
-.product-card {
+
+/* Исправляем расположение иконок */
+.product-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    z-index: 10;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action-btn i {
+    font-size: 14px;
+    color: #333;
+}
+
+.action-btn:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.action-btn:hover i {
+    color: var(--secondary-color);
+}
+
+.action-btn.active {
+    background-color: var(--accent-color);
+}
+
+.action-btn.active i {
+    color: var(--secondary-color);
+}
+
+/* Информация о товаре */
+.product-info {
+    padding: 12px 8px;
+    text-align: center;
+    display: block !important;
+    opacity: 1 !important;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    font-size: 13px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+    height: auto;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-price {
+    font-weight: bold;
+    font-size: 15px;
+    color: #000;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+     .slider-nav {
+    display: none !important;
+     }
+    .products-container {
+        gap: 8px;
+        padding: 5px 0;
+    }
+    
+    .product-card {
+        width: 200px;
+        margin: 0 2px;
+    }
+    
+    .product-image {
+        height: 420px;
+    }
+    
+    .product-info {
+        padding: 10px 6px;
+    }
+    
+    .product-title {
+        font-size: 12px;
+        min-height: 28px;
+    }
+    
+    .product-price {
+        font-size: 14px;
+    }
+    
+    .product-actions {
+        top: 8px;
+        right: 8px;
+    }
+    
+    .action-btn {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .action-btn i {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+   
+    .product-card {
+        width: 180px;
+    }
+    
+    .product-image {
+        height: 360px;
+       
+    }
+    
+    .product-title {
+        font-size: 11px;
+    }
+}
+
+/* Стили для свайпа */
+.products-container.grabbing {
+    cursor: grabbing;
+}
+
+/* Гарантируем видимость всех элементов */
+.product-card * {
     opacity: 1 !important;
     visibility: visible !important;
 }
 
-.product-card > * {
+.product-image img.main-image {
     opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Улучшаем отображение изображений */
-.product-image img {
-    opacity: 1 !important;
-    visibility: visible !important;
     display: block !important;
 }
 
-/* Убираем hover эффекты на мобильных */
-@media (max-width: 768px) {
-    .product-card .hover-image {
-        display: none !important;
-    }
-    
-    .product-card .main-image {
-        opacity: 1 !important;
-        display: block !important;
-    }
-}
-
-/* Улучшаем доступность стрелок на мобильных */
-@media (max-width: 768px) {
-    .slider-nav-btn {
-        width: 44px !important;
-        height: 44px !important;
-        background-color: rgba(255, 255, 255, 0.95) !important;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    .slider-nav-btn i {
-        font-size: 18px;
-    }
+.elusive-block{
+  
+   background-color: #00000090;
+   padding: 20px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 20px;
 }

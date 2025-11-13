@@ -575,33 +575,33 @@ function preloadProductImages() {
     });
 }
 
-// Упрощенный слайдер товаров
+// Улучшенный слайдер товаров с свайпом и без стрелок
 function initProductSlider() {
     const productsContainer = utils.$('.products-container');
-    const prevBtn = utils.$('.prev-btn');
-    const nextBtn = utils.$('.next-btn');
     const productCards = utils.$$('.product-card');
     
     if (!productsContainer || productCards.length === 0) return;
     
     let currentIndex = 0;
-    let cardWidth = productCards[0].offsetWidth + 30; // including gap
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID;
     
-    function updateCardWidth() {
-        cardWidth = productCards[0].offsetWidth + 30;
-    }
-    
+    // Функция для получения количества видимых карточек
     function getVisibleProductsCount() {
         const containerWidth = productsContainer.parentElement.offsetWidth;
-        return Math.max(1, Math.floor(containerWidth / cardWidth));
+        const cardWidth = productCards[0].offsetWidth + 10; // + gap
+        return Math.floor(containerWidth / cardWidth);
     }
     
-    function updateSliderPosition() {
-        const maxIndex = Math.max(0, productCards.length - getVisibleProductsCount());
-        currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
-        productsContainer.style.transform = `translate3d(-${currentIndex * cardWidth}px, 0, 0)`;
+    // Функция для обновления позиции слайдера
+    function setSliderPosition() {
+        productsContainer.style.transform = `translate3d(-${currentIndex * (productCards[0].offsetWidth + 10)}px, 0, 0)`;
     }
     
+    // Функция для перелистывания
     function slide(direction) {
         const maxIndex = Math.max(0, productCards.length - getVisibleProductsCount());
         
@@ -611,53 +611,96 @@ function initProductSlider() {
             currentIndex--;
         }
         
-        updateSliderPosition();
+        setSliderPosition();
     }
     
-    // Кнопки навигации
-    prevBtn?.addEventListener('click', () => slide('prev'));
-    nextBtn?.addEventListener('click', () => slide('next'));
+    // Touch events для свайпа
+    function touchStart(event) {
+        isDragging = true;
+        startPos = getPositionX(event);
+        productsContainer.classList.add('grabbing');
+        animationID = requestAnimationFrame(animation);
+    }
     
-    // Предзагрузка изображений для лучшей производительности
-    preloadProductImages();
+    function touchMove(event) {
+        if (!isDragging) return;
+        const currentPosition = getPositionX(event);
+        currentTranslate = prevTranslate + currentPosition - startPos;
+    }
+    
+    function touchEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        const movedBy = currentTranslate - prevTranslate;
+        const cardWidth = productCards[0].offsetWidth + 10;
+        
+        if (movedBy < -50) { // Свайп влево
+            slide('next');
+        } else if (movedBy > 50) { // Свайп вправо
+            slide('prev');
+        } else {
+            setSliderPosition();
+        }
+        
+        productsContainer.classList.remove('grabbing');
+    }
+    
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+    
+    function animation() {
+        setSliderPosition();
+        if (isDragging) requestAnimationFrame(animation);
+    }
+    
+    // Добавляем обработчики событий для свайпа
+    productsContainer.addEventListener('touchstart', touchStart);
+    productsContainer.addEventListener('touchmove', touchMove);
+    productsContainer.addEventListener('touchend', touchEnd);
+    
+    // Mouse events для десктопа (для тестирования)
+    productsContainer.addEventListener('mousedown', touchStart);
+    productsContainer.addEventListener('mousemove', touchMove);
+    productsContainer.addEventListener('mouseup', touchEnd);
+    productsContainer.addEventListener('mouseleave', touchEnd);
+    
+    // Предотвращаем конфликт событий
+    productsContainer.addEventListener('dragstart', (e) => e.preventDefault());
     
     // Адаптация при изменении размера
     window.addEventListener('resize', utils.debounce(() => {
-        updateCardWidth();
-        updateSliderPosition();
+        setSliderPosition();
     }, 250));
     
     // Инициализация
-    updateCardWidth();
-    updateSliderPosition();
-
-    // Принудительно показываем все элементы в карточках товаров на мобильных
-    if (window.innerWidth <= 768) {
-        productCards.forEach(card => {
-            const images = card.querySelectorAll('img');
-            const info = card.querySelector('.product-info');
-            const actions = card.querySelector('.product-actions');
-            
-            images.forEach(img => {
+    setSliderPosition();
+    
+    // Принудительно показываем все элементы в карточках товаров
+    productCards.forEach(card => {
+        const images = card.querySelectorAll('img');
+        const info = card.querySelector('.product-info');
+        const actions = card.querySelector('.product-actions');
+        
+        // Гарантируем видимость основного изображения
+        images.forEach(img => {
+            if (img.classList.contains('main-image')) {
                 img.style.display = 'block';
                 img.style.opacity = '1';
-                img.style.visibility = 'visible';
-            });
-            
-            if (info) {
-                info.style.display = 'block';
-                info.style.opacity = '1';
-                info.style.visibility = 'visible';
-            }
-            
-            if (actions) {
-                actions.style.display = 'flex';
-                actions.style.opacity = '1';
-                actions.style.visibility = 'visible';
-                actions.style.transform = 'translateX(0)';
+            } else if (img.classList.contains('hover-image')) {
+                img.style.display = 'none'; // Скрываем hover изображение
             }
         });
-    }
+        
+        // Гарантируем видимость информации и действий
+        if (info) info.style.display = 'block';
+        if (actions) {
+            actions.style.display = 'flex';
+            actions.style.opacity = '1';
+        }
+    });
 }
 
 function initSliderChoice() {
