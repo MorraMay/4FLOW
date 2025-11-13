@@ -580,32 +580,29 @@ function initProductSlider() {
     const productsContainer = utils.$('.products-container');
     const prevBtn = utils.$('.prev-btn');
     const nextBtn = utils.$('.next-btn');
+    const productCards = utils.$$('.product-card');
     
-    if (!productsContainer) return;
+    if (!productsContainer || productCards.length === 0) return;
     
     let currentIndex = 0;
+    let cardWidth = productCards[0].offsetWidth + 30; // including gap
+    
+    function updateCardWidth() {
+        cardWidth = productCards[0].offsetWidth + 30;
+    }
     
     function getVisibleProductsCount() {
-        if (window.innerWidth < 480) return 1;
-        if (window.innerWidth < 768) return 1;
-        if (window.innerWidth < 1024) return 2;
-        return 4;
+        const containerWidth = productsContainer.parentElement.offsetWidth;
+        return Math.max(1, Math.floor(containerWidth / cardWidth));
     }
     
     function updateSliderPosition() {
-        const productCards = utils.$$('.product-card');
-        if (productCards.length === 0) return;
-        
-        const cardWidth = productCards[0].offsetWidth + 30;
         const maxIndex = Math.max(0, productCards.length - getVisibleProductsCount());
-        
         currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
-        
         productsContainer.style.transform = `translate3d(-${currentIndex * cardWidth}px, 0, 0)`;
     }
     
     function slide(direction) {
-        const productCards = utils.$$('.product-card');
         const maxIndex = Math.max(0, productCards.length - getVisibleProductsCount());
         
         if (direction === 'next' && currentIndex < maxIndex) {
@@ -626,11 +623,41 @@ function initProductSlider() {
     
     // Адаптация при изменении размера
     window.addEventListener('resize', utils.debounce(() => {
+        updateCardWidth();
         updateSliderPosition();
     }, 250));
     
     // Инициализация
+    updateCardWidth();
     updateSliderPosition();
+
+    // Принудительно показываем все элементы в карточках товаров на мобильных
+    if (window.innerWidth <= 768) {
+        productCards.forEach(card => {
+            const images = card.querySelectorAll('img');
+            const info = card.querySelector('.product-info');
+            const actions = card.querySelector('.product-actions');
+            
+            images.forEach(img => {
+                img.style.display = 'block';
+                img.style.opacity = '1';
+                img.style.visibility = 'visible';
+            });
+            
+            if (info) {
+                info.style.display = 'block';
+                info.style.opacity = '1';
+                info.style.visibility = 'visible';
+            }
+            
+            if (actions) {
+                actions.style.display = 'flex';
+                actions.style.opacity = '1';
+                actions.style.visibility = 'visible';
+                actions.style.transform = 'translateX(0)';
+            }
+        });
+    }
 }
 
 function initSliderChoice() {
@@ -1275,5 +1302,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     toggleScrollToTopButton();
 });
-
-
