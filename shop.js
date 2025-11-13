@@ -1,10 +1,10 @@
-// Проверяем, находимся ли мы на странице shop
-function isShopPage() {
-    return document.getElementById('product-grid') !== null;
+// Проверяем, находимся ли мы на странице shop2
+function isShopPage2() {
+    return document.getElementById('product-grid2') !== null;
 }
 
-// Дані про товари для сторінки shop
-const shopProducts = [
+// Данные о товарах для страницы shop2
+const shopProducts2 = [
     // TOPS (10 items)
     { id: 1, name: 'Basic Tee', price: 35.00, category: 'tops', availability: 'in-stock', size: ['s', 'm', 'l'], color: 'black', image: './lots/01.jpg' },
     { id: 2, name: 'Ribbed Tank Top', price: 28.00, category: 'tops', availability: 'in-stock', size: ['xs', 's', 'm'], color: 'white', image: './lots/02.jpg' },
@@ -42,396 +42,359 @@ const shopProducts = [
     { id: 30, name: 'Hair Clips (Set of 2)', price: 15.00, category: 'accessories', availability: 'in-stock', size: [], color: 'n/a', image: './lots/02.jpg' }
 ];
 
-let currentCategory = 'all';
-let currentSort = 'featured';
-let currentFilters = {
+let currentCategory2 = 'all';
+let currentSort2 = 'featured';
+let currentFilters2 = {
     availability: [],
     size: [],
     color: [],
     category: []
 };
 
-// Функции для работы с магазином
-function renderProducts(prods = shopProducts) {
-    if (!isShopPage()) return;
-    
-    const productGrid = document.getElementById('product-grid');
-    if (!productGrid) return;
+// УБИРАЕМ повторное объявление exchangeRates и appState
+// Используем существующие переменные из глобальной области видимости
 
+// Функции для работы с wishlist и cart (используем существующие или создаем новые)
+function toggleWishlist2(productId) {
+    console.log('Toggle wishlist2:', productId);
+    // Используем существующий appState или создаем новый если не существует
+    if (!window.appState) window.appState = { currency: 'EUR', wishlist: {} };
+    
+    if (window.appState.wishlist[productId]) {
+        delete window.appState.wishlist[productId];
+    } else {
+        window.appState.wishlist[productId] = true;
+    }
+    renderProducts2();
+}
+
+function addToCart2(productId) {
+    console.log('Add to cart2:', productId);
+    alert('Product added to cart!');
+}
+
+// Основная функция рендеринга товаров
+function renderProducts2(products = shopProducts2) {
+    if (!isShopPage2()) return;
+    
+    const productGrid2 = document.getElementById('product-grid2');
+    if (!productGrid2) return;
+
+    // Используем существующий exchangeRates или создаем по умолчанию
+    const exchangeRates = window.exchangeRates || { 'EUR': 1, 'USD': 1.1, 'UAH': 40, 'GBP': 0.85 };
+    const appState = window.appState || { currency: 'EUR', wishlist: {} };
+    
     const rate = exchangeRates[appState.currency];
     const currencySymbols = { 'EUR': '€', 'USD': '$', 'UAH': '₴', 'GBP': '£' };
 
-    if (prods.length === 0) {
-        productGrid.innerHTML = '<p style="text-align: center; width: 100%;">No products found matching your criteria.</p>';
-        updateProductCount(0);
+    if (products.length === 0) {
+        productGrid2.innerHTML = '<p style="text-align: center; width: 100%; padding: 40px;">No products found matching your criteria.</p>';
+        updateProductCount2(0);
         return;
     }
 
-    productGrid.innerHTML = prods.map(product => {
+    productGrid2.innerHTML = products.map(product => {
         const convertedPrice = (product.price * rate).toFixed(2);
         const isInWishlist = appState.wishlist[product.id];
-        const availabilityClass = product.availability === 'out-of-stock' ? 'out-of-stock' : '';
+        const availabilityClass = product.availability === 'out-of-stock' ? 'out-of-stock2' : '';
         
         return `
-            <div class="product-card ${availabilityClass}" data-id="${product.id}">
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.name}" class="main-image">
-                    ${product.availability === 'out-of-stock' ? '<div class="out-of-stock-badge">Out of Stock</div>' : ''}
-                    <div class="product-actions">
-                        <button class="action-btn wishlist-btn ${isInWishlist ? 'active' : ''}" data-id="${product.id}">
+            <div class="product-card2 ${availabilityClass}" data-id="${product.id}">
+                <div class="product-image2">
+                    <img src="${product.image}" alt="${product.name}" class="main-image2">
+                    ${product.availability === 'out-of-stock' ? '<div class="out-of-stock-badge2">Out of Stock</div>' : ''}
+                    <div class="product-actions2">
+                        <button class="action-btn2 wishlist-btn2 ${isInWishlist ? 'active2' : ''}" data-id="${product.id}">
                             <i class="fas fa-heart"></i>
                         </button>
-                        <button class="action-btn cart-btn" data-id="${product.id}" ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
+                        <button class="action-btn2 cart-btn2" data-id="${product.id}" ${product.availability === 'out-of-stock' ? 'disabled' : ''}>
                             <i class="fas fa-shopping-bag"></i>
                         </button>
                     </div>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <div class="product-price">${currencySymbols[appState.currency]}${convertedPrice}</div>
+                <div class="product-info2">
+                    <h3 class="product-title2">${product.name}</h3>
+                    <div class="product-price2">${currencySymbols[appState.currency]}${convertedPrice}</div>
                 </div>
             </div>
         `;
     }).join('');
 
-    updateProductCount(prods.length);
-    addProductEventListeners();
+    updateProductCount2(products.length);
+    addProductEventListeners2();
 }
 
-function updateProductCount(count) {
-    if (!isShopPage()) return;
+function updateProductCount2(count) {
+    if (!isShopPage2()) return;
     
-    const productCountElement = document.querySelector('.product-count');
-    if (productCountElement) {
-        productCountElement.textContent = `${count} PRODUCTS`;
+    const productCountElement2 = document.querySelector('.product-count2');
+    if (productCountElement2) {
+        productCountElement2.textContent = `${count} PRODUCTS`;
     }
 }
 
-function sortProducts(prods, criteria) {
+function sortProducts2(products, criteria) {
+    const sorted = [...products];
     switch (criteria) {
         case 'featured':
-            return [...prods];
+            return sorted;
         case 'best-selling':
-            return [...prods].sort((a, b) => a.id - b.id);
+            return sorted.sort((a, b) => a.id - b.id);
         case 'alpha-asc':
-            return [...prods].sort((a, b) => a.name.localeCompare(b.name));
+            return sorted.sort((a, b) => a.name.localeCompare(b.name));
         case 'alpha-desc':
-            return [...prods].sort((a, b) => b.name.localeCompare(a.name));
+            return sorted.sort((a, b) => b.name.localeCompare(a.name));
         case 'price-low-high':
-            return [...prods].sort((a, b) => a.price - b.price);
+            return sorted.sort((a, b) => a.price - b.price);
         case 'price-high-low':
-            return [...prods].sort((a, b) => b.price - a.price);
+            return sorted.sort((a, b) => b.price - a.price);
         case 'date-old-new':
-            return [...prods].sort((a, b) => a.id - b.id);
+            return sorted.sort((a, b) => a.id - b.id);
         case 'date-new-old':
-            return [...prods].sort((a, b) => b.id - a.id);
+            return sorted.sort((a, b) => b.id - a.id);
         default:
-            return prods;
+            return sorted;
     }
 }
 
-function filterProductsByCategory(category) {
-    if (category === 'all') {
-        return shopProducts;
-    }
-    return shopProducts.filter(product => product.category === category);
-}
-
-function applyFilters() {
-    let filtered = [...shopProducts];
+function applyFilters2() {
+    let filtered = [...shopProducts2];
 
     // Category filter
-    if (currentCategory !== 'all') {
-        filtered = filtered.filter(product => product.category === currentCategory);
+    if (currentCategory2 !== 'all') {
+        filtered = filtered.filter(product => product.category === currentCategory2);
     }
 
     // Availability filter
-    if (currentFilters.availability.length > 0) {
+    if (currentFilters2.availability.length > 0) {
         filtered = filtered.filter(product =>
-            currentFilters.availability.includes(product.availability)
+            currentFilters2.availability.includes(product.availability)
         );
     }
 
     // Size filter
-    if (currentFilters.size.length > 0) {
+    if (currentFilters2.size.length > 0) {
         filtered = filtered.filter(product =>
-            product.size && currentFilters.size.some(filterSize => 
+            product.size && currentFilters2.size.some(filterSize => 
                 product.size.includes(filterSize)
             )
         );
     }
 
     // Color filter
-    if (currentFilters.color.length > 0) {
+    if (currentFilters2.color.length > 0) {
         filtered = filtered.filter(product =>
-            currentFilters.color.includes(product.color)
+            currentFilters2.color.includes(product.color)
         );
     }
 
     return filtered;
 }
 
-function updateAndRender() {
-    if (!isShopPage()) return;
+function updateAndRender2() {
+    if (!isShopPage2()) return;
     
-    let filteredProducts = applyFilters();
-    filteredProducts = sortProducts(filteredProducts, currentSort);
-    renderProducts(filteredProducts);
-    updateActiveCategory();
-    updateActiveSort();
+    let filteredProducts = applyFilters2();
+    filteredProducts = sortProducts2(filteredProducts, currentSort2);
+    renderProducts2(filteredProducts);
 }
 
-function updateActiveCategory() {
-    if (!isShopPage()) return;
+function handleSortChange2(sortType) {
+    if (!isShopPage2()) return;
     
-    document.querySelectorAll('.category-filter').forEach(btn => {
-        if (btn.dataset.category === currentCategory) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
+    currentSort2 = sortType;
+    updateAndRender2();
 }
 
-function updateActiveSort() {
-    if (!isShopPage()) return;
+function addProductEventListeners2() {
+    if (!isShopPage2()) return;
     
-    const sortSelect = document.querySelector('.sort-select');
-    if (sortSelect) {
-        sortSelect.value = currentSort;
-    }
-}
-
-function handleCategorySelection(category) {
-    if (!isShopPage()) return;
-    
-    currentCategory = category;
-    updateAndRender();
-}
-
-function handleSortChange(sortType) {
-    if (!isShopPage()) return;
-    
-    currentSort = sortType;
-    updateAndRender();
-}
-
-function addProductEventListeners() {
-    if (!isShopPage()) return;
-    
-    // Обработчики для кнопок wishlist
-    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    // Wishlist buttons
+    document.querySelectorAll('.wishlist-btn2').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const productId = parseInt(btn.dataset.id);
-            toggleWishlist(productId);
-            
-            // Обновляем состояние кнопки
-            btn.classList.toggle('active', !!appState.wishlist[productId]);
+            toggleWishlist2(productId);
         });
     });
 
-    // Обработчики для кнопок добавления в корзину
-    document.querySelectorAll('.cart-btn').forEach(btn => {
+    // Add to cart buttons
+    document.querySelectorAll('.cart-btn2').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const productId = parseInt(btn.dataset.id);
-            const product = shopProducts.find(p => p.id === productId);
+            const product = shopProducts2.find(p => p.id === productId);
             
             if (product && product.availability !== 'out-of-stock') {
-                addToCart(productId);
+                addToCart2(productId);
             }
         });
     });
 
-    // Обработчики для клика по карточке товара
-    document.querySelectorAll('.product-card').forEach(card => {
+    // Product card clicks
+    document.querySelectorAll('.product-card2').forEach(card => {
         card.addEventListener('click', () => {
             const productId = parseInt(card.dataset.id);
-            // Здесь можно добавить переход на страницу товара
             console.log('View product:', productId);
         });
     });
 }
 
-// ФИКС: Обработка кликов по категориям в фильтрах
-function initCategoryFilters() {
-    if (!isShopPage()) return;
+// Инициализация страницы shop2
+function initShopPage2() {
+    if (!isShopPage2()) return;
     
-    // Обработчики для кнопок категорий (All, Tops, Bottoms, Accessories)
-    document.querySelectorAll('.category-filter').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const category = btn.dataset.category;
-            handleCategorySelection(category);
-        });
-    });
+    console.log('Initializing shop page 2');
 
-    // Обработчики для чекбоксов категорий в боковой панели
-    const categoryCheckboxes = document.querySelectorAll('#category input[type="checkbox"]');
-    categoryCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                // Снимаем все другие чекбоксы
-                categoryCheckboxes.forEach(cb => {
-                    if (cb !== e.target) cb.checked = false;
-                });
-                // Устанавливаем текущую категорию
-                currentCategory = e.target.value;
-            } else {
-                // Если сняли последний чекбокс - переключаем на "all"
-                currentCategory = 'all';
-            }
-            updateAndRender();
-        });
-    });
-}
+    // View options (Grid/List)
+    const gridViewBtn2 = document.getElementById('grid-view2');
+    const listViewBtn2 = document.getElementById('list-view2');
+    const productGrid2 = document.getElementById('product-grid2');
 
-// Инициализация страницы shop
-function initShopPage() {
-    if (!isShopPage()) return;
-    
-    // Инициализация фильтров категорий
-    initCategoryFilters();
-
-    // Обработчик для селекта сортировки
-    const sortSelect = document.querySelector('.sort-select');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', (e) => {
-            handleSortChange(e.target.value);
-        });
-    }
-
-    // Обработчики для view options (Grid/List)
-    const gridViewBtn = document.getElementById('grid-view');
-    const listViewBtn = document.getElementById('list-view');
-    const productGrid = document.getElementById('product-grid');
-
-    if (gridViewBtn && listViewBtn && productGrid) {
-        gridViewBtn.addEventListener('click', () => {
-            productGrid.classList.remove('list-view');
-            gridViewBtn.classList.add('active');
-            listViewBtn.classList.remove('active');
+    if (gridViewBtn2 && listViewBtn2 && productGrid2) {
+        gridViewBtn2.addEventListener('click', () => {
+            productGrid2.classList.remove('list-view2');
+            gridViewBtn2.classList.add('active2');
+            listViewBtn2.classList.remove('active2');
         });
 
-        listViewBtn.addEventListener('click', () => {
-            productGrid.classList.add('list-view');
-            listViewBtn.classList.add('active');
-            gridViewBtn.classList.remove('active');
+        listViewBtn2.addEventListener('click', () => {
+            productGrid2.classList.add('list-view2');
+            listViewBtn2.classList.add('active2');
+            gridViewBtn2.classList.remove('active2');
         });
     }
 
     // Sort Dropdown
-    const sortButton = document.getElementById('sort-button');
-    const sortDropdown = document.getElementById('sort-dropdown');
+    const sortButton2 = document.getElementById('sort-button2');
+    const sortDropdown2 = document.getElementById('sort-dropdown2');
 
-    if (sortButton && sortDropdown) {
-        sortButton.addEventListener('click', () => {
-            sortDropdown.classList.toggle('show');
+    if (sortButton2 && sortDropdown2) {
+        sortButton2.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sortDropdown2.classList.toggle('show2');
         });
 
-        sortDropdown.addEventListener('click', (e) => {
+        sortDropdown2.addEventListener('click', (e) => {
             if (e.target.tagName === 'LI') {
                 const selectedSort = e.target.dataset.sort;
-                currentSort = selectedSort;
-                sortButton.innerHTML = `SORT BY <i class="fas fa-chevron-down"></i>`;
-                sortDropdown.classList.remove('show');
-                updateAndRender();
+                handleSortChange2(selectedSort);
+                sortButton2.innerHTML = `SORT BY <i class="fas fa-chevron-down"></i>`;
+                sortDropdown2.classList.remove('show2');
             }
         });
     }
 
     // Filter Sidebar
-    const filterButton = document.getElementById('filter-button');
-    const filterSidebar = document.getElementById('filter-sidebar');
-    const closeFilterBtn = document.getElementById('close-filter');
-    const filterGroupHeaders = document.querySelectorAll('.filter-group-header');
-    const viewResultsButton = document.querySelector('.view-results-button');
+    const filterButton2 = document.getElementById('filter-button2');
+    const filterSidebar2 = document.getElementById('filter-sidebar2');
+    const closeFilterBtn2 = document.getElementById('close-filter2');
+    const filterGroupHeaders2 = document.querySelectorAll('.filter-group-header2');
+    const viewResultsButton2 = document.querySelector('.view-results-button2');
 
-    if (filterButton && filterSidebar) {
-        filterButton.addEventListener('click', () => {
-            filterSidebar.classList.add('open');
-            document.querySelector('.overlay')?.classList.add('active');
+    if (filterButton2 && filterSidebar2) {
+        filterButton2.addEventListener('click', () => {
+            filterSidebar2.classList.add('open2');
+            // Create overlay if it doesn't exist
+            let overlay2 = document.querySelector('.overlay2');
+            if (!overlay2) {
+                overlay2 = document.createElement('div');
+                overlay2.className = 'overlay2';
+                document.body.appendChild(overlay2);
+                
+                // Close sidebar when clicking overlay
+                overlay2.addEventListener('click', () => {
+                    filterSidebar2.classList.remove('open2');
+                    overlay2.classList.remove('active2');
+                });
+            }
+            overlay2.classList.add('active2');
         });
     }
 
-    if (closeFilterBtn && filterSidebar) {
-        closeFilterBtn.addEventListener('click', () => {
-            filterSidebar.classList.remove('open');
-            document.querySelector('.overlay')?.classList.remove('active');
+    if (closeFilterBtn2 && filterSidebar2) {
+        closeFilterBtn2.addEventListener('click', () => {
+            filterSidebar2.classList.remove('open2');
+            document.querySelector('.overlay2')?.classList.remove('active2');
         });
     }
 
-    // Toggle filter groups in sidebar
-    if (filterGroupHeaders) {
-        filterGroupHeaders.forEach(header => {
-            header.addEventListener('click', () => {
-                const targetId = header.dataset.target;
-                const targetOptions = document.getElementById(targetId);
-                if (targetOptions) {
-                    targetOptions.classList.toggle('show');
-                    const icon = header.querySelector('i');
-                    if (icon) {
-                        icon.classList.toggle('fa-chevron-up');
-                        icon.classList.toggle('fa-chevron-down');
-                    }
+    // Toggle filter groups
+    filterGroupHeaders2.forEach(header => {
+        header.addEventListener('click', () => {
+            const targetId = header.dataset.target;
+            const targetOptions = document.getElementById(targetId);
+            if (targetOptions) {
+                targetOptions.classList.toggle('show2');
+                const icon = header.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-chevron-up');
+                    icon.classList.toggle('fa-chevron-down');
                 }
-            });
+            }
         });
-    }
+    });
 
-    // Update currentFilters when checkboxes change in sidebar (кроме категорий)
-    if (filterSidebar) {
-        filterSidebar.addEventListener('change', (e) => {
-            if (e.target.type === 'checkbox' && e.target.name !== 'category') {
-                const filterType = e.target.name;
+    // Filter change handlers
+    if (filterSidebar2) {
+        filterSidebar2.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                const filterType = e.target.name.replace('2', ''); // Убираем 2 из имени
                 const filterValue = e.target.value;
 
                 if (e.target.checked) {
-                    if (!currentFilters[filterType].includes(filterValue)) {
-                        currentFilters[filterType].push(filterValue);
+                    if (!currentFilters2[filterType].includes(filterValue)) {
+                        currentFilters2[filterType].push(filterValue);
                     }
                 } else {
-                    currentFilters[filterType] = currentFilters[filterType].filter(item => item !== filterValue);
+                    currentFilters2[filterType] = currentFilters2[filterType].filter(item => item !== filterValue);
+                }
+                
+                // Special handling for category
+                if (filterType === 'category') {
+                    if (e.target.checked) {
+                        currentCategory2 = filterValue;
+                        // Uncheck other category checkboxes
+                        document.querySelectorAll('#category2 input[type="checkbox"]').forEach(cb => {
+                            if (cb !== e.target) cb.checked = false;
+                        });
+                    } else {
+                        currentCategory2 = 'all';
+                    }
                 }
             }
         });
     }
 
-    // Apply filters and close sidebar when "VIEW RESULTS" is clicked
-    if (viewResultsButton) {
-        viewResultsButton.addEventListener('click', () => {
-            updateAndRender();
-            filterSidebar?.classList.remove('open');
-            document.querySelector('.overlay')?.classList.remove('active');
+    // Apply filters
+    if (viewResultsButton2) {
+        viewResultsButton2.addEventListener('click', () => {
+            updateAndRender2();
+            filterSidebar2.classList.remove('open2');
+            document.querySelector('.overlay2')?.classList.remove('active2');
         });
     }
 
-    // Close dropdown if clicked outside
-    window.addEventListener('click', (e) => {
-        if (!e.target.matches('#sort-button') && !e.target.matches('#sort-button *')) {
-            if (sortDropdown?.classList.contains('show')) {
-                sortDropdown.classList.remove('show');
-            }
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.matches('#sort-button2') && !e.target.closest('#sort-button2')) {
+            sortDropdown2?.classList.remove('show2');
         }
     });
 
-    // Инициализация
-    updateAndRender();
+    // Initial render
+    updateAndRender2();
 }
 
-// Запуск при загрузке страницы
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем, есть ли на странице элементы магазина
-    if (isShopPage()) {
-        initShopPage();
+    if (isShopPage2()) {
+        initShopPage2();
     }
 });
 
-// Обновление при изменении валюты
-function updateShopPrices() {
-    if (!isShopPage()) return;
-    updateAndRender();
-}
-
-// Добавляем функцию в глобальную область видимости для доступа из главного JS
-window.updateShopPrices = updateShopPrices;
+// Global function for currency updates
+window.updateShopPrices2 = function() {
+    if (!isShopPage2()) return;
+    updateAndRender2();
+};

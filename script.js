@@ -508,6 +508,54 @@ function updateLanguageDisplay() {
     });
 }
 
+// Функции для адаптивных изображений hero-slider
+function updateHeroSliderImages() {
+    const slides = document.querySelectorAll('.hero-slider .slide');
+    const isMobile = window.innerWidth <= 768;
+    
+    // Объект с путями к изображениям для разных устройств
+    const imagePaths = {
+        desktop: {
+            slide1: './images/DSC08195.jpg',
+            slide2: './images/1.png',
+            slide3: './images/5.png',
+            slide4: './images/13.jpg'
+        },
+        mobile: {
+            slide1: './images/DSC08195.jpg',
+            slide2: './images/10.png',
+            slide3: './images/12.jpg',
+            slide4: './images/13d.jpg'
+        }
+    };
+    
+    slides.forEach((slide, index) => {
+        const slideNumber = index + 1;
+        const imageKey = `slide${slideNumber}`;
+        
+        // Выбираем правильное изображение в зависимости от устройства
+        const imagePath = isMobile ? imagePaths.mobile[imageKey] : imagePaths.desktop[imageKey];
+        
+        // Устанавливаем новое изображение
+        slide.style.backgroundImage = `url('${imagePath}')`;
+    });
+}
+
+function initAdaptiveHeroSlider() {
+    // Обновляем изображения при загрузке
+    updateHeroSliderImages();
+    
+    // Обновляем изображения при изменении размера окна
+    window.addEventListener('resize', utils.debounce(() => {
+        updateHeroSliderImages();
+    }, 250));
+    
+    // Также обновляем при изменении ориентации устройства
+    window.addEventListener('orientationchange', () => {
+        setTimeout(updateHeroSliderImages, 100);
+    });
+}
+
 // Слайдеры
 function initMainSlider() {
     const slides = utils.$$('.slide');
@@ -1218,6 +1266,7 @@ function init() {
     initProductSlider();
     initSliderChoice();
     initNewsletterAnimation();
+    initAdaptiveHeroSlider(); // Добавлен вызов функции для адаптивных изображений
     
     updateHeaderCounts();
     updateCurrencyDisplay();
