@@ -3005,7 +3005,7 @@ mark {
     gap: 15px;
     padding: 10px 0;
     cursor: grab;
-    width: max-content;
+   /*  width: max-content; */
 }
 
 .product-card {
@@ -3063,7 +3063,7 @@ mark {
     .product-actions {
         position: absolute;
         top: 15px;
-        right: 15px;
+        left: 15px;
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -3075,8 +3075,23 @@ mark {
         width: 35px;
         height: 35px;
         background-color: rgba(255, 255, 255, 0.9);
+        
     }
-    
+    .action-btn i{
+      
+        width: 35px;
+        height: 35px;
+        margin-top: 10px;
+        position: relative;
+        
+        
+    }
+     .action-btn i::before{
+         position: absolute; 
+        left:  23%;
+        top: 23%;
+     
+     }
     /* Убедимся, что стрелки видны на мобильных */
     .slider-nav {
         display: flex !important;
@@ -3104,7 +3119,7 @@ mark {
     }
     
     .product-image {
-        height: 300px;
+        /* height: 300px; */
     }
 }
 
